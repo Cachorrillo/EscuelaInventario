@@ -1,0 +1,33 @@
+﻿@page
+@model EscuelaInventario.Web.Pages.PruebaConexionModel
+
+@{
+    ViewData["Title"] = "Prueba de conexión";
+}
+
+<h1>Prueba de conexión</h1>
+
+<p>Estados obtenidos directamente desde SQL Server:</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Orden</th>
+            <th>Activo</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var estado in Model.Estados)
+        {
+            <tr>
+                <td>@estado.Id</td>
+                <td>@estado.Nombre</td>
+                <td>@estado.Orden</td>
+                <td>@estado.Activo</td>
+            </tr>
+        }
+    </tbody>
+</table>
