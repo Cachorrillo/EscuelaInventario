@@ -1,0 +1,89 @@
+﻿@page
+@model EscuelaInventario.Web.Pages.ModosAdquisicion.IndexModel
+
+@{
+    ViewData["Title"] = "Modos de adquisición";
+}
+
+@if (TempData["MensajeExito"] != null)
+{
+    <div id="mensajeExito"
+         class="alert alert-success alert-dismissible fade show"
+         role="alert">
+
+        @TempData["MensajeExito"]
+
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Cerrar">
+        </button>
+    </div>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1>Modos de adquisición</h1>
+        <p class="text-muted">
+            Administración de los métodos mediante los cuales se adquieren los activos.
+        </p>
+    </div>
+
+    <a asp-page="Create" class="btn btn-primary">
+        Nuevo modo
+    </a>
+</div>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Estado</th>
+            <th>Observaciones</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var modo in Model.ModosAdquisicion)
+        {
+            <tr>
+                <td>@modo.Nombre</td>
+
+                <td>
+                    @if (modo.Activo)
+                    {
+                        <span class="badge bg-success">Activo</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Inactivo</span>
+                    }
+                </td>
+
+                <td>@modo.Observaciones</td>
+
+                <td>
+                    <a asp-page="Edit"
+                       asp-route-id="@modo.Id"
+                       class="btn btn-sm btn-outline-primary">
+                        Editar
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        setTimeout(function () {
+            const mensaje = document.getElementById('mensajeExito');
+
+            if (mensaje) {
+                const alerta = bootstrap.Alert.getOrCreateInstance(mensaje);
+                alerta.close();
+            }
+        }, 3000);
+    </script>
+}

@@ -1,0 +1,81 @@
+﻿@page "{id:int}"
+@model EscuelaInventario.Web.Pages.ModosAdquisicion.EditModel
+
+@{
+    ViewData["Title"] = "Editar modo de adquisición";
+}
+
+<h1>Editar modo de adquisición</h1>
+
+<p class="text-muted">
+    Modifique la información del método seleccionado.
+</p>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+
+        <form method="post">
+
+            <input type="hidden"
+                   asp-for="ModoAdquisicion.Id" />
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3">
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ModoAdquisicion.Nombre"
+                       class="form-label">
+                    Nombre
+                </label>
+
+                <input asp-for="ModoAdquisicion.Nombre"
+                       class="form-control" />
+
+                <span asp-validation-for="ModoAdquisicion.Nombre"
+                      class="text-danger">
+                </span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ModoAdquisicion.Observaciones"
+                       class="form-label">
+                    Observaciones
+                </label>
+
+                <textarea asp-for="ModoAdquisicion.Observaciones"
+                          class="form-control"
+                          rows="4">
+                </textarea>
+            </div>
+
+            <div class="form-check mb-3">
+                <input asp-for="ModoAdquisicion.Activo"
+                       class="form-check-input" />
+
+                <label asp-for="ModoAdquisicion.Activo"
+                       class="form-check-label">
+                    Modo activo
+                </label>
+            </div>
+
+            <button type="submit"
+                    class="btn btn-primary">
+                Guardar cambios
+            </button>
+
+            <a asp-page="Index"
+               class="btn btn-secondary">
+                Cancelar
+            </a>
+
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

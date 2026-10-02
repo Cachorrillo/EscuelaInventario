@@ -51,12 +51,36 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/victo/source/repos/EscuelaInventario/EscuelaInventario.Web/Pages/ModosAdquisicion/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTW9kb3NBZHF1aXNpY2lvblxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/victo/source/repos/EscuelaInventario/EscuelaInventario.Web/Pages/ModosAdquisicion/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTW9kb3NBZHF1aXNpY2lvblxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/victo/source/repos/EscuelaInventario/EscuelaInventario.Web/Pages/ModosAdquisicion/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTW9kb3NBZHF1aXNpY2lvblxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/victo/source/repos/EscuelaInventario/EscuelaInventario.Web/Pages/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/victo/source/repos/EscuelaInventario/EscuelaInventario.Web/Pages/PruebaConexion.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJ1ZWJhQ29uZXhpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/victo/source/repos/EscuelaInventario/EscuelaInventario.Web/Pages/Responsables/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVzcG9uc2FibGVzXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/victo/source/repos/EscuelaInventario/EscuelaInventario.Web/Pages/Responsables/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVzcG9uc2FibGVzXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/victo/source/repos/EscuelaInventario/EscuelaInventario.Web/Pages/Responsables/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVzcG9uc2FibGVzXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/victo/source/repos/EscuelaInventario/EscuelaInventario.Web/Pages/Shared/_ValidationScriptsPartial.cshtml]

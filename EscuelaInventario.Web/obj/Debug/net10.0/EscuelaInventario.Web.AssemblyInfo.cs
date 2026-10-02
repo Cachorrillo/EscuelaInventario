@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EscuelaInventario.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e0dddca9e08420f2aa798c686359607725d3ebdd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+50dd68c315ea7a2e73fa4f250a83e675f75dc63c")]
 [assembly: System.Reflection.AssemblyProductAttribute("EscuelaInventario.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EscuelaInventario.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
