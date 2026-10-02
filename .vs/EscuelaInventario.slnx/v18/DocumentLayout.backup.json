@@ -3,12 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|c:\\users\\victo\\source\\repos\\escuelainventario\\escuelainventario.web\\pages\\pruebaconexion.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|solutionrelative:escuelainventario.web\\pages\\pruebaconexion.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|c:\\users\\victo\\source\\repos\\escuelainventario\\escuelainventario.web\\pages\\pruebaconexion.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|solutionrelative:escuelainventario.web\\pages\\pruebaconexion.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|c:\\users\\victo\\source\\repos\\escuelainventario\\escuelainventario.web\\pages\\areas\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|solutionrelative:escuelainventario.web\\pages\\areas\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,32 +14,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PruebaConexion.cshtml.cs",
-              "DocumentMoniker": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Pages\\PruebaConexion.cshtml.cs",
-              "RelativeDocumentMoniker": "EscuelaInventario.Web\\Pages\\PruebaConexion.cshtml.cs",
-              "ToolTip": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Pages\\PruebaConexion.cshtml.cs",
-              "RelativeToolTip": "EscuelaInventario.Web\\Pages\\PruebaConexion.cshtml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-27T18:20:00.334Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "PruebaConexion.cshtml",
-              "DocumentMoniker": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Pages\\PruebaConexion.cshtml",
-              "RelativeDocumentMoniker": "EscuelaInventario.Web\\Pages\\PruebaConexion.cshtml",
-              "ToolTip": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Pages\\PruebaConexion.cshtml",
-              "RelativeToolTip": "EscuelaInventario.Web\\Pages\\PruebaConexion.cshtml",
-              "ViewState": "AgIAAAQAAAAAAAAAAAAuwCAAAAAIAAAAAAAAAA==",
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Pages\\Areas\\Index.cshtml",
+              "RelativeDocumentMoniker": "EscuelaInventario.Web\\Pages\\Areas\\Index.cshtml",
+              "ToolTip": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Pages\\Areas\\Index.cshtml",
+              "RelativeToolTip": "EscuelaInventario.Web\\Pages\\Areas\\Index.cshtml",
+              "ViewState": "AgIAAEQAAAAAAAAAAAAAAFgAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-09-27T18:19:36.173Z",
+              "WhenOpened": "2026-10-02T22:39:47.075Z",
               "EditorCaption": ""
             }
           ]

@@ -278,3 +278,4 @@ C:\Users\victo\source\repos\EscuelaInventario\EscuelaInventario.Web\bin\Debug\ne
 C:\Users\victo\source\repos\EscuelaInventario\EscuelaInventario.Web\bin\Debug\net10.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\victo\source\repos\EscuelaInventario\EscuelaInventario.Web\bin\Debug\net10.0\runtimes\win\lib\net9.0\System.Windows.Extensions.dll
 C:\Users\victo\source\repos\EscuelaInventario\EscuelaInventario.Web\obj\Debug\net10.0\EscuelaInventario.Web.csproj.AssemblyReference.cache
+C:\Users\victo\source\repos\EscuelaInventario\EscuelaInventario.Web\obj\Debug\net10.0\EscuelaInventario.Web.sourcelink.json
