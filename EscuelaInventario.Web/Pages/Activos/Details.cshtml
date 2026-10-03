@@ -1,0 +1,288 @@
+﻿@page "{id:int}"
+@model EscuelaInventario.Web.Pages.Activos.DetailsModel
+
+@{
+    ViewData["Title"] = "Ficha del activo";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1>Ficha del activo</h1>
+        <p class="text-muted mb-0">
+            Información actual e histórico del activo.
+        </p>
+    </div>
+
+    <a asp-page="Index"
+       class="btn btn-secondary">
+        Volver al inventario
+    </a>
+</div>
+
+<hr />
+
+<div class="card mb-4">
+    <div class="card-header">
+        <strong>Información actual</strong>
+    </div>
+
+    <div class="card-body">
+
+        <div class="row mb-3">
+
+            <div class="col-md-3">
+                <strong>Placa</strong>
+                <div>@Model.Activo.Placa</div>
+            </div>
+
+            <div class="col-md-5">
+                <strong>Descripción</strong>
+                <div>@Model.Activo.Descripcion</div>
+            </div>
+
+            <div class="col-md-4">
+                <strong>Área actual</strong>
+                <div>
+                    Área @Model.Activo.AreaActual.Numero -
+                    @Model.Activo.AreaActual.Nombre
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row mb-3">
+
+            <div class="col-md-3">
+                <strong>Estado físico</strong>
+                <div>@Model.Activo.EstadoActivo.Nombre</div>
+            </div>
+
+            <div class="col-md-3">
+                <strong>Situación</strong>
+                <div>
+                    @if (Model.Activo.SituacionActivo.Codigo == "ACTIVO")
+                    {
+                        <span class="badge bg-success">
+                            @Model.Activo.SituacionActivo.Nombre
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">
+                            @Model.Activo.SituacionActivo.Nombre
+                        </span>
+                    }
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <strong>Marca</strong>
+                <div>@(Model.Activo.Marca ?? "-")</div>
+            </div>
+
+            <div class="col-md-3">
+                <strong>Modelo</strong>
+                <div>@(Model.Activo.Modelo ?? "-")</div>
+            </div>
+
+        </div>
+
+
+        <div class="row mb-3">
+
+            <div class="col-md-3">
+                <strong>Serie</strong>
+                <div>@(Model.Activo.Serie ?? "-")</div>
+            </div>
+
+            <div class="col-md-3">
+                <strong>Fecha de adquisición</strong>
+                <div>
+                    @(Model.Activo.FechaAdquisicion?.ToString("dd/MM/yyyy") ?? "-")
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <strong>Precio</strong>
+                <div>
+                    @(Model.Activo.Precio.HasValue
+                        ? Model.Activo.Precio.Value.ToString("N2")
+                        : "-")
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <strong>Modo de adquisición</strong>
+                <div>
+                    @(Model.Activo.ModoAdquisicion?.Nombre ?? "-")
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-12">
+                <strong>Observaciones</strong>
+                <div>
+                    @(string.IsNullOrWhiteSpace(Model.Activo.Observaciones)
+                        ? "-"
+                        : Model.Activo.Observaciones)
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-header">
+        <strong>Histórico de movimientos</strong>
+    </div>
+
+    <div class="card-body p-0">
+
+        @if (!Model.Movimientos.Any())
+        {
+            <div class="p-3 text-muted">
+                No existen movimientos registrados para este activo.
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+
+                <table class="table table-striped table-bordered mb-0 align-middle">
+
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th>Cambio</th>
+                            <th>Responsable</th>
+                            <th>Tomo</th>
+                            <th>Folio</th>
+                            <th>Asiento</th>
+                            <th>Observación</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var movimiento in Model.Movimientos)
+                        {
+                            var registroPrincipal = movimiento.RegistroLibros
+                                .OrderByDescending(r => r.EsPrincipal)
+                                .ThenBy(r => r.Id)
+                                .FirstOrDefault();
+
+                            <tr>
+
+                                <td>
+                                    @movimiento.FechaMovimiento.ToString("dd/MM/yyyy")
+                                </td>
+
+                                <td>
+                                    @movimiento.TipoMovimiento.Nombre
+                                </td>
+
+                                <td>
+
+                                    @if (movimiento.AreaAnteriorId.HasValue ||
+                                         movimiento.AreaNuevaId.HasValue)
+                                    {
+                                        <div>
+                                            <strong>Área:</strong>
+
+                                            @(movimiento.AreaAnterior != null
+                                                ? $"Área {movimiento.AreaAnterior.Numero} - {movimiento.AreaAnterior.Nombre}"
+                                                : "-")
+
+                                            →
+
+                                            @(movimiento.AreaNueva != null
+                                                ? $"Área {movimiento.AreaNueva.Numero} - {movimiento.AreaNueva.Nombre}"
+                                                : "-")
+                                        </div>
+                                    }
+
+                                    @if (movimiento.EstadoAnteriorId.HasValue ||
+                                         movimiento.EstadoNuevoId.HasValue)
+                                    {
+                                        <div>
+                                            <strong>Estado:</strong>
+
+                                            @(movimiento.EstadoAnterior?.Nombre ?? "-")
+
+                                            →
+
+                                            @(movimiento.EstadoNuevo?.Nombre ?? "-")
+                                        </div>
+                                    }
+
+                                    @if (movimiento.SituacionAnteriorId.HasValue ||
+                                         movimiento.SituacionNuevaId.HasValue)
+                                    {
+                                        <div>
+                                            <strong>Situación:</strong>
+
+                                            @(movimiento.SituacionAnterior?.Nombre ?? "-")
+
+                                            →
+
+                                            @(movimiento.SituacionNueva?.Nombre ?? "-")
+                                        </div>
+                                    }
+
+                                    @if (!movimiento.AreaAnteriorId.HasValue &&
+                                         !movimiento.AreaNuevaId.HasValue &&
+                                         !movimiento.EstadoAnteriorId.HasValue &&
+                                         !movimiento.EstadoNuevoId.HasValue &&
+                                         !movimiento.SituacionAnteriorId.HasValue &&
+                                         !movimiento.SituacionNuevaId.HasValue)
+                                    {
+                                        <span class="text-muted">
+                                            Ver observación
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td>
+                                    @(movimiento.Responsable?.Nombre ?? "-")
+                                </td>
+
+                                <td>
+                                    @(registroPrincipal?.Tomo.ToString() ?? "-")
+                                </td>
+
+                                <td>
+                                    @(registroPrincipal?.Folio.ToString() ?? "-")
+                                </td>
+
+                                <td>
+                                    @(registroPrincipal?.Asiento.ToString() ?? "-")
+                                </td>
+
+                                <td>
+                                    @(string.IsNullOrWhiteSpace(movimiento.Observacion)
+                                        ? "-"
+                                        : movimiento.Observacion)
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+    </div>
+</div>

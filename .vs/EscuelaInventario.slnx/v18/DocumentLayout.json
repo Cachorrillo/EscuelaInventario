@@ -1,12 +1,54 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|c:\\users\\victo\\source\\repos\\escuelainventario\\escuelainventario.web\\pages\\activos\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|solutionrelative:escuelainventario.web\\pages\\activos\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|c:\\users\\victo\\source\\repos\\escuelainventario\\escuelainventario.web\\pages\\activos\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|solutionrelative:escuelainventario.web\\pages\\activos\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Details.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Pages\\Activos\\Details.cshtml.cs",
+              "RelativeDocumentMoniker": "EscuelaInventario.Web\\Pages\\Activos\\Details.cshtml.cs",
+              "ToolTip": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Pages\\Activos\\Details.cshtml.cs",
+              "RelativeToolTip": "EscuelaInventario.Web\\Pages\\Activos\\Details.cshtml.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAUwDQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-03T20:18:37.311Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Pages\\Activos\\Details.cshtml",
+              "RelativeDocumentMoniker": "EscuelaInventario.Web\\Pages\\Activos\\Details.cshtml",
+              "ToolTip": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Pages\\Activos\\Details.cshtml",
+              "RelativeToolTip": "EscuelaInventario.Web\\Pages\\Activos\\Details.cshtml",
+              "ViewState": "AgIAAA4BAAAAAAAAAAAuwB8BAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-03T20:18:32.428Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

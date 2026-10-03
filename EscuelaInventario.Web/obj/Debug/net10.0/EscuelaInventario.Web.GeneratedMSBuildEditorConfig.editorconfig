@@ -31,6 +31,18 @@ build_property._RazorSourceGeneratorDebug =
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
+[C:/Users/victo/source/repos/EscuelaInventario/EscuelaInventario.Web/Pages/Activos/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWN0aXZvc1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/victo/source/repos/EscuelaInventario/EscuelaInventario.Web/Pages/Activos/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWN0aXZvc1xEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/victo/source/repos/EscuelaInventario/EscuelaInventario.Web/Pages/Activos/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWN0aXZvc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/victo/source/repos/EscuelaInventario/EscuelaInventario.Web/Pages/Areas/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXJlYXNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
