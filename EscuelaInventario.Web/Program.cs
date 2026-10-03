@@ -1,5 +1,7 @@
 using EscuelaInventario.Web.Data;
+using EscuelaInventario.Web.Services;
 using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<EscuelaInventarioContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("EscuelaInventarioConnection")));
+
+builder.Services.AddScoped<InventarioService>();
 
 var app = builder.Build();
 
