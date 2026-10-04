@@ -43,6 +43,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWN0aXZvc1xEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/victo/source/repos/EscuelaInventario/EscuelaInventario.Web/Pages/Activos/Editar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWN0aXZvc1xFZGl0YXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/victo/source/repos/EscuelaInventario/EscuelaInventario.Web/Pages/Activos/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWN0aXZvc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

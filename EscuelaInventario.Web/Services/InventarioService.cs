@@ -601,6 +601,186 @@ public class InventarioService
         }
     }
 
+    public async Task<ResultadoModificacionActivo> ModificarActivoAsync(
+    int activoId,
+    string descripcion,
+    string? marca,
+    string? modelo,
+    string? serie,
+    DateOnly? fechaAdquisicion,
+    decimal? precio,
+    int? modoAdquisicionId,
+    string? observacionesActivo,
+    DateOnly fechaMovimiento,
+    int? responsableId,
+    string? motivo,
+    string? observacionMovimiento)
+    {
+        await using var transaction =
+            await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            // 1. Obtener el activo
+            var activo = await _context.Activos
+                .FirstOrDefaultAsync(a => a.Id == activoId);
+
+            if (activo == null)
+            {
+                throw new InvalidOperationException(
+                    "El activo seleccionado no existe.");
+            }
+
+            // 2. Validar modo de adquisición si se seleccionó
+            if (modoAdquisicionId.HasValue)
+            {
+                bool modoValido = await _context.ModoAdquisicions
+                    .AnyAsync(m =>
+                        m.Id == modoAdquisicionId.Value &&
+                        m.Activo);
+
+                if (!modoValido)
+                {
+                    throw new InvalidOperationException(
+                        "El modo de adquisición seleccionado no es válido.");
+                }
+            }
+
+            // 3. Validar responsable
+            if (responsableId.HasValue)
+            {
+                bool responsableValido = await _context.Responsables
+                    .AnyAsync(r =>
+                        r.Id == responsableId.Value &&
+                        r.Activo);
+
+                if (!responsableValido)
+                {
+                    throw new InvalidOperationException(
+                        "El responsable seleccionado no es válido.");
+                }
+            }
+
+            // 4. Obtener configuración
+            var configuracion = await _context.ConfiguracionInventarios
+                .FirstOrDefaultAsync(c => c.Id == 1);
+
+            if (configuracion == null)
+            {
+                throw new InvalidOperationException(
+                    "No existe la configuración general del inventario.");
+            }
+
+            // 5. Obtener tipo MODIFICACION
+            var tipoModificacion = await _context.TipoMovimientos
+                .FirstOrDefaultAsync(t => t.Codigo == "MODIFICACION");
+
+            if (tipoModificacion == null)
+            {
+                throw new InvalidOperationException(
+                    "No se encontró el tipo de movimiento MODIFICACION.");
+            }
+
+            // 6. Calcular siguiente posición del libro
+            int nuevoTomo = configuracion.TomoActual;
+            int nuevoFolio = configuracion.FolioActual;
+            int nuevoAsiento;
+
+            if (configuracion.AsientoActual == 0)
+            {
+                nuevoAsiento = 1;
+            }
+            else if (configuracion.AsientoActual <
+                     configuracion.AsientosPorFolio)
+            {
+                nuevoAsiento = configuracion.AsientoActual + 1;
+            }
+            else
+            {
+                nuevoFolio++;
+                nuevoAsiento = 1;
+            }
+
+            // Cambio automático de tomo sigue pendiente de confirmar.
+
+            // 7. Aplicar modificaciones permitidas
+            activo.Descripcion = descripcion.Trim();
+            activo.Marca = LimpiarTextoInterno(marca);
+            activo.Modelo = LimpiarTextoInterno(modelo);
+            activo.Serie = LimpiarTextoInterno(serie);
+            activo.FechaAdquisicion = fechaAdquisicion;
+            activo.Precio = precio;
+            activo.ModoAdquisicionId = modoAdquisicionId;
+            activo.Observaciones = LimpiarTextoInterno(observacionesActivo);
+            activo.FechaModificacion = DateTime.Now;
+
+            // 8. Crear movimiento histórico
+            var movimiento = new MovimientoInventario
+            {
+                ActivoId = activo.Id,
+                TipoMovimientoId = tipoModificacion.Id,
+                FechaMovimiento = fechaMovimiento,
+
+                AreaAnteriorId = null,
+                AreaNuevaId = null,
+                EstadoAnteriorId = null,
+                EstadoNuevoId = null,
+                SituacionAnteriorId = null,
+                SituacionNuevaId = null,
+
+                Motivo = LimpiarTextoInterno(motivo),
+                Observacion = LimpiarTextoInterno(observacionMovimiento),
+                ResponsableId = responsableId
+            };
+
+            _context.MovimientoInventarios.Add(movimiento);
+
+            await _context.SaveChangesAsync();
+
+            // 9. Crear registro del libro
+            var registroLibro = new RegistroLibro
+            {
+                MovimientoInventarioId = movimiento.Id,
+                Tomo = nuevoTomo,
+                Folio = nuevoFolio,
+                Asiento = nuevoAsiento,
+                EsPrincipal = true,
+                EsHistorico = false
+            };
+
+            _context.RegistroLibros.Add(registroLibro);
+
+            // 10. Actualizar configuración
+            configuracion.TomoActual = nuevoTomo;
+            configuracion.FolioActual = nuevoFolio;
+            configuracion.AsientoActual = nuevoAsiento;
+            configuracion.FechaModificacion = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+
+            return new ResultadoModificacionActivo(
+                activo.Id,
+                nuevoTomo,
+                nuevoFolio,
+                nuevoAsiento
+            );
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+
+    private static string? LimpiarTextoInterno(string? texto)
+    {
+        return string.IsNullOrWhiteSpace(texto)
+            ? null
+            : texto.Trim();
+    }
+
 }
 
 
@@ -625,6 +805,13 @@ public record ResultadoCambioEstado(
     int ActivoId,
     int EstadoAnteriorId,
     int EstadoNuevoId,
+    int Tomo,
+    int Folio,
+    int Asiento
+);
+
+public record ResultadoModificacionActivo(
+    int ActivoId,
     int Tomo,
     int Folio,
     int Asiento

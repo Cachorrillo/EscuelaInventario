@@ -7,12 +7,16 @@
       "RelativeMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|solutionrelative:escuelainventario.web\\pages\\activos\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|c:\\users\\victo\\source\\repos\\escuelainventario\\escuelainventario.web\\pages\\activos\\cambiarestado.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|solutionrelative:escuelainventario.web\\pages\\activos\\cambiarestado.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|c:\\users\\victo\\source\\repos\\escuelainventario\\escuelainventario.web\\pages\\activos\\editar.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|solutionrelative:escuelainventario.web\\pages\\activos\\editar.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|c:\\users\\victo\\source\\repos\\escuelainventario\\escuelainventario.web\\pages\\activos\\cambiarestado.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|solutionrelative:escuelainventario.web\\pages\\activos\\cambiarestado.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|c:\\users\\victo\\source\\repos\\escuelainventario\\escuelainventario.web\\pages\\activos\\editar.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|solutionrelative:escuelainventario.web\\pages\\activos\\editar.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|c:\\users\\victo\\source\\repos\\escuelainventario\\escuelainventario.web\\services\\inventarioservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51A71F77-0E0D-7778-28C3-2922481CFBF4}|EscuelaInventario.Web\\EscuelaInventario.Web.csproj|solutionrelative:escuelainventario.web\\services\\inventarioservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -32,35 +36,48 @@
               "RelativeDocumentMoniker": "EscuelaInventario.Web\\Pages\\Activos\\Details.cshtml",
               "ToolTip": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Pages\\Activos\\Details.cshtml",
               "RelativeToolTip": "EscuelaInventario.Web\\Pages\\Activos\\Details.cshtml",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAgwCIAAAAKAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABsAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-10-04T03:49:38.499Z",
+              "WhenOpened": "2026-10-04T20:46:56.833Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "InventarioService.cs",
+              "DocumentMoniker": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Services\\InventarioService.cs",
+              "RelativeDocumentMoniker": "EscuelaInventario.Web\\Services\\InventarioService.cs",
+              "ToolTip": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Services\\InventarioService.cs",
+              "RelativeToolTip": "EscuelaInventario.Web\\Services\\InventarioService.cs",
+              "ViewState": "AgIAAJACAAAAAAAAAAAcwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-04T20:44:56.899Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "CambiarEstado.cshtml.cs",
-              "DocumentMoniker": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Pages\\Activos\\CambiarEstado.cshtml.cs",
-              "RelativeDocumentMoniker": "EscuelaInventario.Web\\Pages\\Activos\\CambiarEstado.cshtml.cs",
-              "ToolTip": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Pages\\Activos\\CambiarEstado.cshtml.cs",
-              "RelativeToolTip": "EscuelaInventario.Web\\Pages\\Activos\\CambiarEstado.cshtml.cs",
-              "ViewState": "AgIAAIIAAAAAAAAAAAAgwJwAAAABAAAAAAAAAA==",
+              "Title": "Editar.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Pages\\Activos\\Editar.cshtml.cs",
+              "RelativeDocumentMoniker": "EscuelaInventario.Web\\Pages\\Activos\\Editar.cshtml.cs",
+              "ToolTip": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Pages\\Activos\\Editar.cshtml.cs",
+              "RelativeToolTip": "EscuelaInventario.Web\\Pages\\Activos\\Editar.cshtml.cs",
+              "ViewState": "AgIAAKkAAAAAAAAAAAAiwMMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-04T03:46:40.159Z",
+              "WhenOpened": "2026-10-04T20:43:31.064Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "CambiarEstado.cshtml",
-              "DocumentMoniker": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Pages\\Activos\\CambiarEstado.cshtml",
-              "RelativeDocumentMoniker": "EscuelaInventario.Web\\Pages\\Activos\\CambiarEstado.cshtml",
-              "ToolTip": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Pages\\Activos\\CambiarEstado.cshtml",
-              "RelativeToolTip": "EscuelaInventario.Web\\Pages\\Activos\\CambiarEstado.cshtml",
-              "ViewState": "AgIAAKUAAAAAAAAAAAAgwL8AAAABAAAAAAAAAA==",
+              "Title": "Editar.cshtml",
+              "DocumentMoniker": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Pages\\Activos\\Editar.cshtml",
+              "RelativeDocumentMoniker": "EscuelaInventario.Web\\Pages\\Activos\\Editar.cshtml",
+              "ToolTip": "C:\\Users\\victo\\source\\repos\\EscuelaInventario\\EscuelaInventario.Web\\Pages\\Activos\\Editar.cshtml",
+              "RelativeToolTip": "EscuelaInventario.Web\\Pages\\Activos\\Editar.cshtml",
+              "ViewState": "AgIAADIBAAAAAAAAAAAgwEwBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-10-04T03:46:36.011Z",
+              "WhenOpened": "2026-10-04T20:43:28.498Z",
               "EditorCaption": ""
             }
           ]

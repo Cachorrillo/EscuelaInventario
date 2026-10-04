@@ -21,6 +21,12 @@
             Trasladar activo
         </a>
 
+        <a asp-page="Editar"
+           asp-route-id="@Model.Activo.Id"
+           class="btn btn-outline-secondary">
+            Editar información
+        </a>
+
         <a asp-page="CambiarEstado"
            asp-route-id="@Model.Activo.Id"
            class="btn btn-outline-primary">
