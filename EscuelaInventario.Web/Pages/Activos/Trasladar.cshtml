@@ -1,0 +1,192 @@
+﻿@page "{id:int}"
+@model EscuelaInventario.Web.Pages.Activos.TrasladarModel
+
+@{
+    ViewData["Title"] = "Trasladar activo";
+}
+
+<h1>Trasladar activo</h1>
+
+<p class="text-muted">
+    Registre el traslado del activo a una nueva área.
+</p>
+
+<hr />
+
+<form method="post">
+
+    <input type="hidden"
+           asp-for="Input.ActivoId" />
+
+    <div asp-validation-summary="ModelOnly"
+         class="alert alert-danger"
+         role="alert">
+    </div>
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+            <strong>Activo seleccionado</strong>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-3">
+                    <strong>Placa</strong>
+                    <div>@Model.Placa</div>
+                </div>
+
+                <div class="col-md-5">
+                    <strong>Descripción</strong>
+                    <div>@Model.Descripcion</div>
+                </div>
+
+                <div class="col-md-4">
+                    <strong>Área actual</strong>
+                    <div>@Model.AreaActual</div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <div class="mb-3">
+
+                <label asp-for="Input.NuevaAreaId"
+                       class="form-label">
+                    Nueva área *
+                </label>
+
+                <select asp-for="Input.NuevaAreaId"
+                        asp-items="Model.Areas"
+                        class="form-select">
+
+                    <option value="0">
+                        -- Seleccione el área de destino --
+                    </option>
+
+                </select>
+
+                <span asp-validation-for="Input.NuevaAreaId"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6">
+
+            <div class="mb-3">
+
+                <label asp-for="Input.FechaMovimiento"
+                       class="form-label">
+                    Fecha del traslado *
+                </label>
+
+                <input asp-for="Input.FechaMovimiento"
+                       type="date"
+                       class="form-control" />
+
+                <span asp-validation-for="Input.FechaMovimiento"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <div class="mb-3">
+
+                <label asp-for="Input.ResponsableId"
+                       class="form-label">
+                    Responsable
+                </label>
+
+                <select asp-for="Input.ResponsableId"
+                        asp-items="Model.Responsables"
+                        class="form-select">
+
+                    <option value="">
+                        -- Sin especificar --
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6">
+
+            <div class="mb-3">
+
+                <label asp-for="Input.Motivo"
+                       class="form-label">
+                    Motivo
+                </label>
+
+                <input asp-for="Input.Motivo"
+                       class="form-control" />
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="mb-4">
+
+        <label asp-for="Input.Observacion"
+               class="form-label">
+            Observación
+        </label>
+
+        <textarea asp-for="Input.Observacion"
+                  class="form-control"
+                  rows="4">
+        </textarea>
+
+    </div>
+
+
+    <div class="d-flex gap-2">
+
+        <button type="submit"
+                class="btn btn-primary">
+            Confirmar traslado
+        </button>
+
+        <a asp-page="Details"
+           asp-route-id="@Model.Input.ActivoId"
+           class="btn btn-secondary">
+            Cancelar
+        </a>
+
+    </div>
+
+</form>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
