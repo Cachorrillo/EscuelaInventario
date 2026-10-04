@@ -1,0 +1,185 @@
+﻿@page "{id:int}"
+@model EscuelaInventario.Web.Pages.Activos.BajaModel
+
+@{
+    ViewData["Title"] = "Dar de baja";
+}
+
+<h1>Dar de baja activo</h1>
+
+<p class="text-muted">
+    Registre la baja administrativa del activo.
+</p>
+
+<hr />
+
+<form method="post">
+
+    <input type="hidden"
+           asp-for="Input.ActivoId" />
+
+    <div asp-validation-summary="ModelOnly"
+         class="alert alert-danger"
+         role="alert">
+    </div>
+
+    <div class="card mb-4">
+
+        <div class="card-header">
+            <strong>Activo seleccionado</strong>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-3">
+                    <strong>Placa</strong>
+                    <div>@Model.Placa</div>
+                </div>
+
+                <div class="col-md-3">
+                    <strong>Descripción</strong>
+                    <div>@Model.Descripcion</div>
+                </div>
+
+                <div class="col-md-3">
+                    <strong>Área actual</strong>
+                    <div>@Model.AreaActual</div>
+                </div>
+
+                <div class="col-md-3">
+                    <strong>Estado físico</strong>
+                    <div>@Model.EstadoActual</div>
+                </div>
+
+            </div>
+
+            <div class="row mt-3">
+
+                <div class="col-md-3">
+                    <strong>Situación actual</strong>
+                    <div>@Model.SituacionActual</div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="alert alert-warning">
+        <strong>Importante:</strong>
+        esta operación no elimina el activo.
+        El registro permanecerá en el sistema y en su histórico,
+        pero su situación administrativa cambiará a
+        <strong>Dado de baja</strong>.
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <div class="mb-3">
+
+                <label asp-for="Input.FechaMovimiento"
+                       class="form-label">
+                    Fecha de baja *
+                </label>
+
+                <input asp-for="Input.FechaMovimiento"
+                       type="date"
+                       class="form-control" />
+
+                <span asp-validation-for="Input.FechaMovimiento"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6">
+
+            <div class="mb-3">
+
+                <label asp-for="Input.ResponsableId"
+                       class="form-label">
+                    Responsable
+                </label>
+
+                <select asp-for="Input.ResponsableId"
+                        asp-items="Model.Responsables"
+                        class="form-select">
+
+                    <option value="">
+                        -- Sin especificar --
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="mb-3">
+
+        <label asp-for="Input.Motivo"
+               class="form-label">
+            Motivo de la baja *
+        </label>
+
+        <input asp-for="Input.Motivo"
+               class="form-control"
+               placeholder="Ej. Activo fuera de servicio" />
+
+        <span asp-validation-for="Input.Motivo"
+              class="text-danger">
+        </span>
+
+    </div>
+
+
+    <div class="mb-4">
+
+        <label asp-for="Input.Observacion"
+               class="form-label">
+            Observación
+        </label>
+
+        <textarea asp-for="Input.Observacion"
+                  class="form-control"
+                  rows="4"
+                  placeholder="Detalle adicional sobre la baja.">
+        </textarea>
+
+    </div>
+
+
+    <div class="d-flex gap-2">
+
+        <button type="submit"
+                class="btn btn-danger">
+            Confirmar baja
+        </button>
+
+        <a asp-page="Details"
+           asp-route-id="@Model.Input.ActivoId"
+           class="btn btn-secondary">
+            Cancelar
+        </a>
+
+    </div>
+
+</form>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

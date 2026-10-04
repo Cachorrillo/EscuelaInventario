@@ -781,6 +781,185 @@ public class InventarioService
             : texto.Trim();
     }
 
+    public async Task<ResultadoBajaActivo> DarBajaActivoAsync(
+    int activoId,
+    DateOnly fechaMovimiento,
+    int? responsableId,
+    string? motivo,
+    string? observacion)
+    {
+        await using var transaction =
+            await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            // 1. Obtener activo
+            var activo = await _context.Activos
+                .FirstOrDefaultAsync(a => a.Id == activoId);
+
+            if (activo == null)
+            {
+                throw new InvalidOperationException(
+                    "El activo seleccionado no existe.");
+            }
+
+            // 2. Obtener situación ACTIVO
+            var situacionActiva = await _context.SituacionActivos
+                .FirstOrDefaultAsync(s => s.Codigo == "ACTIVO");
+
+            if (situacionActiva == null)
+            {
+                throw new InvalidOperationException(
+                    "No se encontró la situación administrativa ACTIVO.");
+            }
+
+            // 3. Obtener situación BAJA
+            var situacionBaja = await _context.SituacionActivos
+                .FirstOrDefaultAsync(s => s.Codigo == "BAJA");
+
+            if (situacionBaja == null)
+            {
+                throw new InvalidOperationException(
+                    "No se encontró la situación administrativa BAJA.");
+            }
+
+            // 4. Evitar dar de baja algo que ya está de baja
+            if (activo.SituacionActivoId == situacionBaja.Id)
+            {
+                throw new InvalidOperationException(
+                    "El activo ya se encuentra dado de baja.");
+            }
+
+            // 5. Validar responsable si fue seleccionado
+            if (responsableId.HasValue)
+            {
+                bool responsableValido = await _context.Responsables
+                    .AnyAsync(r =>
+                        r.Id == responsableId.Value &&
+                        r.Activo);
+
+                if (!responsableValido)
+                {
+                    throw new InvalidOperationException(
+                        "El responsable seleccionado no es válido.");
+                }
+            }
+
+            // 6. Obtener configuración
+            var configuracion = await _context.ConfiguracionInventarios
+                .FirstOrDefaultAsync(c => c.Id == 1);
+
+            if (configuracion == null)
+            {
+                throw new InvalidOperationException(
+                    "No existe la configuración general del inventario.");
+            }
+
+            // 7. Obtener tipo de movimiento BAJA
+            var tipoBaja = await _context.TipoMovimientos
+                .FirstOrDefaultAsync(t => t.Codigo == "BAJA");
+
+            if (tipoBaja == null)
+            {
+                throw new InvalidOperationException(
+                    "No se encontró el tipo de movimiento BAJA.");
+            }
+
+            // 8. Calcular siguiente posición del libro
+            int nuevoTomo = configuracion.TomoActual;
+            int nuevoFolio = configuracion.FolioActual;
+            int nuevoAsiento;
+
+            if (configuracion.AsientoActual == 0)
+            {
+                nuevoAsiento = 1;
+            }
+            else if (configuracion.AsientoActual <
+                     configuracion.AsientosPorFolio)
+            {
+                nuevoAsiento = configuracion.AsientoActual + 1;
+            }
+            else
+            {
+                nuevoFolio++;
+                nuevoAsiento = 1;
+            }
+
+            // Cambio automático de tomo:
+            // pendiente hasta confirmar la regla institucional.
+
+            // 9. Crear movimiento histórico
+            var movimiento = new MovimientoInventario
+            {
+                ActivoId = activo.Id,
+
+                TipoMovimientoId = tipoBaja.Id,
+
+                FechaMovimiento = fechaMovimiento,
+
+                AreaAnteriorId = null,
+                AreaNuevaId = null,
+
+                EstadoAnteriorId = null,
+                EstadoNuevoId = null,
+
+                SituacionAnteriorId = activo.SituacionActivoId,
+                SituacionNuevaId = situacionBaja.Id,
+
+                Motivo = LimpiarTextoInterno(motivo),
+                Observacion = LimpiarTextoInterno(observacion),
+
+                ResponsableId = responsableId
+            };
+
+            _context.MovimientoInventarios.Add(movimiento);
+
+            await _context.SaveChangesAsync();
+
+            // 10. Crear registro del libro
+            var registroLibro = new RegistroLibro
+            {
+                MovimientoInventarioId = movimiento.Id,
+
+                Tomo = nuevoTomo,
+                Folio = nuevoFolio,
+                Asiento = nuevoAsiento,
+
+                EsPrincipal = true,
+                EsHistorico = false
+            };
+
+            _context.RegistroLibros.Add(registroLibro);
+
+            // 11. Actualizar situación vigente del activo
+            activo.SituacionActivoId = situacionBaja.Id;
+            activo.FechaModificacion = DateTime.Now;
+
+            // 12. Actualizar configuración
+            configuracion.TomoActual = nuevoTomo;
+            configuracion.FolioActual = nuevoFolio;
+            configuracion.AsientoActual = nuevoAsiento;
+            configuracion.FechaModificacion = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+
+            // 13. Confirmar
+            await transaction.CommitAsync();
+
+            return new ResultadoBajaActivo(
+                activo.Id,
+                nuevoTomo,
+                nuevoFolio,
+                nuevoAsiento
+            );
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+
 }
 
 
@@ -811,6 +990,13 @@ public record ResultadoCambioEstado(
 );
 
 public record ResultadoModificacionActivo(
+    int ActivoId,
+    int Tomo,
+    int Folio,
+    int Asiento
+);
+
+public record ResultadoBajaActivo(
     int ActivoId,
     int Tomo,
     int Folio,

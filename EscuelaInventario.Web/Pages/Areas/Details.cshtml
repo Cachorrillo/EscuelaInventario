@@ -1,0 +1,126 @@
+﻿@page "{id:int}"
+@model EscuelaInventario.Web.Pages.Areas.DetailsModel
+
+@{
+    ViewData["Title"] = "Inventario por área";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+    <div>
+        <h1>
+            Área @Model.Area.Numero - @Model.Area.Nombre
+        </h1>
+
+        <p class="text-muted mb-0">
+            Activos actualmente asignados a esta área.
+        </p>
+    </div>
+
+    <a asp-page="Index"
+       class="btn btn-secondary">
+        Volver a áreas
+    </a>
+
+</div>
+
+<hr />
+
+<div class="mb-3">
+
+    <strong>Total de activos:</strong>
+    @Model.Activos.Count
+
+</div>
+
+@if (!Model.Activos.Any())
+{
+    <div class="alert alert-info">
+        Esta área no tiene activos asignados actualmente.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+
+        <table class="table table-striped table-bordered align-middle">
+
+            <thead>
+                <tr>
+                    <th>Placa</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                    <th>Situación</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Serie</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var activo in Model.Activos)
+                {
+                    <tr>
+
+                        <td>
+                            @activo.Placa
+                        </td>
+
+                        <td>
+                            @activo.Descripcion
+                        </td>
+
+                        <td>
+                            @activo.EstadoActivo.Nombre
+                        </td>
+
+                        <td>
+
+                            @if (activo.SituacionActivo.Codigo == "ACTIVO")
+                            {
+                                <span class="badge bg-success">
+                                    @activo.SituacionActivo.Nombre
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">
+                                    @activo.SituacionActivo.Nombre
+                                </span>
+                            }
+
+                        </td>
+
+                        <td>
+                            @(activo.Marca ?? "-")
+                        </td>
+
+                        <td>
+                            @(activo.Modelo ?? "-")
+                        </td>
+
+                        <td>
+                            @(activo.Serie ?? "-")
+                        </td>
+
+                        <td>
+
+                            <a asp-page="/Activos/Details"
+                               asp-route-id="@activo.Id"
+                               class="btn btn-sm btn-outline-primary">
+                                Ver
+                            </a>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+}

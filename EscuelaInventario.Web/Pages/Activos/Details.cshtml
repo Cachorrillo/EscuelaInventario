@@ -8,6 +8,7 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
         <h1>Ficha del activo</h1>
+
         <p class="text-muted mb-0">
             Información actual e histórico del activo.
         </p>
@@ -15,23 +16,38 @@
 
     <div class="d-flex gap-2">
 
-        <a asp-page="Trasladar"
-           asp-route-id="@Model.Activo.Id"
-           class="btn btn-primary">
-            Trasladar activo
-        </a>
+        @if (Model.Activo.SituacionActivo.Codigo == "ACTIVO")
+        {
+            <a asp-page="Trasladar"
+               asp-route-id="@Model.Activo.Id"
+               class="btn btn-primary">
+                Trasladar activo
+            </a>
 
-        <a asp-page="Editar"
-           asp-route-id="@Model.Activo.Id"
-           class="btn btn-outline-secondary">
-            Editar información
-        </a>
+            <a asp-page="Editar"
+               asp-route-id="@Model.Activo.Id"
+               class="btn btn-outline-secondary">
+                Editar información
+            </a>
 
-        <a asp-page="CambiarEstado"
-           asp-route-id="@Model.Activo.Id"
-           class="btn btn-outline-primary">
-            Cambiar estado
-        </a>
+            <a asp-page="CambiarEstado"
+               asp-route-id="@Model.Activo.Id"
+               class="btn btn-outline-primary">
+                Cambiar estado
+            </a>
+
+            <a asp-page="Baja"
+               asp-route-id="@Model.Activo.Id"
+               class="btn btn-danger">
+                Dar de baja
+            </a>
+        }
+        else
+        {
+            <span class="badge bg-secondary align-self-center p-2">
+                Activo dado de baja
+            </span>
+        }
 
         <a asp-page="Index"
            class="btn btn-secondary">

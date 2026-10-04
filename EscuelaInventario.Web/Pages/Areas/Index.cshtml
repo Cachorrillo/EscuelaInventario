@@ -66,11 +66,21 @@
                 <td>@area.Observaciones</td>
 
                 <td>
-                    <a asp-page="Edit"
-                       asp-route-id="@area.Id"
-                       class="btn btn-sm btn-outline-primary">
-                        Editar
-                    </a>
+                    <div class="d-flex gap-2">
+
+                        <a asp-page="Details"
+                           asp-route-id="@area.Id"
+                           class="btn btn-sm btn-outline-success">
+                            Ver activos
+                        </a>
+
+                        <a asp-page="Edit"
+                           asp-route-id="@area.Id"
+                           class="btn btn-sm btn-outline-primary">
+                            Editar
+                        </a>
+
+                    </div>
                 </td>
             </tr>
         }
