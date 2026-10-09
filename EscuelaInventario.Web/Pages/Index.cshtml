@@ -1,10 +1,238 @@
 ﻿@page
 @model IndexModel
+
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- ENCABEZADO PRINCIPAL -->
+<div class="p-5 mb-4 bg-light rounded-3 border">
+
+    <div class="container-fluid py-3">
+
+        <span class="badge bg-primary mb-3">
+            Sistema de Gestión de Inventario
+        </span>
+
+        <h1 class="display-5 fw-bold">
+            Escuela de Enseñanza Especial de Heredia
+        </h1>
+
+        <p class="fs-5 text-muted mb-3">
+            San Rafael de Heredia, Costa Rica
+        </p>
+
+        <p class="col-md-9 fs-5">
+            Sistema institucional para el registro, consulta y seguimiento
+            de los activos, sus ubicaciones y su historial administrativo.
+        </p>
+
+        <div class="d-flex gap-2 mt-4">
+
+            <a asp-page="/Activos/Index"
+               class="btn btn-primary btn-lg">
+                Ver inventario
+            </a>
+
+            <a asp-page="/Areas/Index"
+               class="btn btn-outline-secondary btn-lg">
+                Consultar áreas
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- INFORMACIÓN INSTITUCIONAL -->
+<div class="row g-4 mb-4">
+
+    <div class="col-lg-7">
+
+        <div class="card h-100 shadow-sm">
+
+            <div class="card-body p-4">
+
+                <h2 class="h4 mb-3">
+                    Sobre la institución
+                </h2>
+
+                <p>
+                    La Escuela de Enseñanza Especial de Heredia es un centro
+                    educativo ubicado en el cantón de San Rafael de Heredia,
+                    dedicado a brindar atención educativa especializada.
+                </p>
+
+                <p class="mb-0">
+                    La institución atiende estudiantes en distintos niveles
+                    de educación especial y cuenta con servicios educativos
+                    y complementarios orientados a las diferentes necesidades
+                    de apoyo de su población estudiantil.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-lg-5">
+
+        <div class="card h-100 shadow-sm">
+
+            <div class="card-body p-4">
+
+                <h2 class="h4 mb-3">
+                    Información general
+                </h2>
+
+                <div class="mb-3">
+                    <div class="text-muted small">
+                        Institución
+                    </div>
+
+                    <strong>
+                        Escuela de Enseñanza Especial de Heredia
+                    </strong>
+                </div>
+
+                <div class="mb-3">
+                    <div class="text-muted small">
+                        Ubicación
+                    </div>
+
+                    <strong>
+                        San Rafael, Heredia
+                    </strong>
+                </div>
+
+                <div>
+                    <div class="text-muted small">
+                        Sistema
+                    </div>
+
+                    <strong>
+                        Gestión de Inventario Institucional
+                    </strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- FUNCIONES DEL SISTEMA -->
+<div class="mb-4">
+
+    <div class="mb-3">
+        <h2 class="h4">
+            Gestión del inventario
+        </h2>
+
+        <p class="text-muted">
+            Acceso rápido a las principales funciones del sistema.
+        </p>
+    </div>
+
+    <div class="row g-3">
+
+        <div class="col-md-4">
+
+            <div class="card h-100 border-0 shadow-sm">
+
+                <div class="card-body">
+
+                    <h3 class="h5">
+                        Inventario general
+                    </h3>
+
+                    <p class="text-muted">
+                        Consulte los activos registrados, su ubicación,
+                        estado y situación administrativa.
+                    </p>
+
+                    <a asp-page="/Activos/Index"
+                       class="btn btn-outline-primary">
+                        Consultar inventario
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card h-100 border-0 shadow-sm">
+
+                <div class="card-body">
+
+                    <h3 class="h5">
+                        Activos por área
+                    </h3>
+
+                    <p class="text-muted">
+                        Consulte las áreas institucionales y los activos
+                        actualmente asignados a cada una.
+                    </p>
+
+                    <a asp-page="/Areas/Index"
+                       class="btn btn-outline-primary">
+                        Consultar áreas
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card h-100 border-0 shadow-sm">
+
+                <div class="card-body">
+
+                    <h3 class="h5">
+                        Nuevo activo
+                    </h3>
+
+                    <p class="text-muted">
+                        Registre un nuevo activo y genere automáticamente
+                        su placa y posición correspondiente en el libro.
+                    </p>
+
+                    <a asp-page="/Activos/Create"
+                       class="btn btn-outline-primary">
+                        Registrar activo
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- NOTA FINAL -->
+<div class="alert alert-light border mt-4">
+
+    <strong>Control y trazabilidad:</strong>
+    cada operación registrada en el sistema conserva el historial
+    administrativo correspondiente del activo.
+
 </div>

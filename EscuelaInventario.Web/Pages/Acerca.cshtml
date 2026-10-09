@@ -1,0 +1,246 @@
+﻿@page
+@model EscuelaInventario.Web.Pages.AcercaModel
+
+@{
+    ViewData["Title"] = "Acerca del sistema";
+}
+
+<div class="mb-4">
+
+    <h1>Acerca del sistema</h1>
+
+    <p class="text-muted">
+        Información general, tecnologías utilizadas y créditos del sistema.
+    </p>
+
+</div>
+
+
+<div class="row g-4">
+
+    <div class="col-lg-7">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body p-4">
+
+                <span class="badge bg-primary mb-3">
+                    Versión 1.0
+                </span>
+
+                <h2 class="h3 mb-3">
+                    Sistema de Inventario Institucional
+                </h2>
+
+                <p class="mb-3">
+                    Aplicación desarrollada para apoyar la gestión,
+                    consulta y seguimiento de los activos institucionales
+                    de la Escuela de Enseñanza Especial de Heredia.
+                </p>
+
+                <p class="mb-0">
+                    El sistema permite mantener información actualizada
+                    sobre los activos, sus ubicaciones, estados,
+                    movimientos e historial administrativo, conservando
+                    la trazabilidad de las operaciones realizadas.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-lg-5">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body p-4">
+
+                <h2 class="h4 mb-4">
+                    Información del proyecto
+                </h2>
+
+                <div class="mb-3">
+
+                    <div class="text-muted small">
+                        Institución
+                    </div>
+
+                    <strong>
+                        Escuela de Enseñanza Especial de Heredia
+                    </strong>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <div class="text-muted small">
+                        Ubicación
+                    </div>
+
+                    <strong>
+                        San Rafael, Heredia, Costa Rica
+                    </strong>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <div class="text-muted small">
+                        Tipo de sistema
+                    </div>
+
+                    <strong>
+                        Gestión de Inventario Institucional
+                    </strong>
+
+                </div>
+
+                <div>
+
+                    <div class="text-muted small">
+                        Año
+                    </div>
+
+                    <strong>
+                        2026
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card shadow-sm mt-4">
+
+    <div class="card-body p-4">
+
+        <h2 class="h4 mb-4">
+            Tecnologías utilizadas
+        </h2>
+
+        <div class="row g-3">
+
+            <div class="col-md-3">
+                <div class="border rounded p-3 h-100">
+                    <strong>.NET 10</strong>
+                    <div class="text-muted small mt-1">
+                        Plataforma principal
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="border rounded p-3 h-100">
+                    <strong>ASP.NET Core Razor Pages</strong>
+                    <div class="text-muted small mt-1">
+                        Aplicación web
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="border rounded p-3 h-100">
+                    <strong>Entity Framework Core</strong>
+                    <div class="text-muted small mt-1">
+                        Acceso a datos
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="border rounded p-3 h-100">
+                    <strong>SQL Server Express</strong>
+                    <div class="text-muted small mt-1">
+                        Base de datos
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="row g-4 mt-1">
+
+    <div class="col-lg-6">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body p-4">
+
+                <h2 class="h4 mb-3">
+                    Desarrollo
+                </h2>
+
+                <p class="mb-2">
+                    <strong>Desarrollado y diseñado por:</strong>
+                </p>
+
+                <p class="fs-5 mb-3">
+                    Vi
+                </p>
+
+                <p class="text-muted mb-3">
+                    Proyecto desarrollado y diseñado como solución para la
+                    administración del inventario institucional.
+                </p>
+
+                <a href="https://github.com/Cachorrillo/EscuelaInventario"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn btn-outline-dark btn-sm">
+                    Ver repositorio
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-lg-6">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body p-4">
+
+                <h2 class="h4 mb-3">
+                    Uso del sistema
+                </h2>
+
+                <p class="mb-0">
+                    Este sistema está destinado al uso institucional
+                    para apoyar los procesos de control, consulta y
+                    seguimiento de los activos registrados.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="mt-4">
+
+    <a asp-page="/Index"
+       class="btn btn-secondary">
+        Volver al inicio
+    </a>
+
+</div>
