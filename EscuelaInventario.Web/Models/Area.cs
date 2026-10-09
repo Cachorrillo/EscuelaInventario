@@ -16,7 +16,7 @@ public partial class Area
     public int Numero { get; set; }
 
     [StringLength(150)]
-    public string Nombre { get; set; } = null!;
+    public string? Nombre { get; set; }
 
     public bool Activa { get; set; }
 

@@ -41,6 +41,7 @@ public class CreateModel : PageModel
             return Page();
         }
 
+        Area.Nombre = null;
         Area.Activa = true;
 
         _context.Areas.Add(Area);

@@ -121,8 +121,9 @@ public class TrasladarModel : PageModel
 
         Placa = activo.Placa;
         Descripcion = activo.Descripcion;
+
         AreaActual =
-            $"Área {activo.AreaActual.Numero} - {activo.AreaActual.Nombre}";
+            $"Área {activo.AreaActual.Numero}";
 
         Areas = await _context.Areas
             .Where(a =>
@@ -132,7 +133,7 @@ public class TrasladarModel : PageModel
             .Select(a => new SelectListItem
             {
                 Value = a.Id.ToString(),
-                Text = $"Área {a.Numero} - {a.Nombre}"
+                Text = $"Área {a.Numero}"
             })
             .ToListAsync();
 

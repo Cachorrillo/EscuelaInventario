@@ -81,13 +81,11 @@
             <div class="col-md-4">
                 <strong>Área actual</strong>
                 <div>
-                    Área @Model.Activo.AreaActual.Numero -
-                    @Model.Activo.AreaActual.Nombre
+                    Área @Model.Activo.AreaActual.Numero
                 </div>
             </div>
 
         </div>
-
 
         <div class="row mb-3">
 
@@ -126,7 +124,6 @@
 
         </div>
 
-
         <div class="row mb-3">
 
             <div class="col-md-3">
@@ -159,7 +156,6 @@
 
         </div>
 
-
         <div class="row">
 
             <div class="col-12">
@@ -175,7 +171,6 @@
 
     </div>
 </div>
-
 
 <div class="card">
     <div class="card-header">
@@ -201,6 +196,7 @@
                             <th>Fecha</th>
                             <th>Tipo</th>
                             <th>Cambio</th>
+                            <th>Motivo</th>
                             <th>Responsable</th>
                             <th>Tomo</th>
                             <th>Folio</th>
@@ -237,13 +233,13 @@
                                             <strong>Área:</strong>
 
                                             @(movimiento.AreaAnterior != null
-                                                ? $"Área {movimiento.AreaAnterior.Numero} - {movimiento.AreaAnterior.Nombre}"
+                                                ? $"Área {movimiento.AreaAnterior.Numero}"
                                                 : "-")
 
                                             →
 
                                             @(movimiento.AreaNueva != null
-                                                ? $"Área {movimiento.AreaNueva.Numero} - {movimiento.AreaNueva.Nombre}"
+                                                ? $"Área {movimiento.AreaNueva.Numero}"
                                                 : "-")
                                         </div>
                                     }
@@ -288,6 +284,12 @@
                                         </span>
                                     }
 
+                                </td>
+
+                                <td>
+                                    @(string.IsNullOrWhiteSpace(movimiento.Motivo)
+                                        ? "-"
+                                        : movimiento.Motivo)
                                 </td>
 
                                 <td>

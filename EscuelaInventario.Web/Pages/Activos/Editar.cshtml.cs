@@ -153,7 +153,7 @@ public class EditarModel : PageModel
         Placa = activo.Placa;
 
         AreaActual =
-            $"Área {activo.AreaActual.Numero} - {activo.AreaActual.Nombre}";
+            $"Área {activo.AreaActual.Numero}";
 
         EstadoActual = activo.EstadoActivo.Nombre;
         SituacionActual = activo.SituacionActivo.Nombre;

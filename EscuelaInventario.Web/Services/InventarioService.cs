@@ -92,28 +92,8 @@ public class InventarioService
             // 5. Calcular siguiente tomo / folio / asiento
             // ----------------------------------------------------
 
-            int nuevoTomo = configuracion.TomoActual;
-            int nuevoFolio = configuracion.FolioActual;
-            int nuevoAsiento;
-
-            if (configuracion.AsientoActual == 0)
-            {
-                nuevoAsiento = 1;
-            }
-            else if (configuracion.AsientoActual <
-                     configuracion.AsientosPorFolio)
-            {
-                nuevoAsiento = configuracion.AsientoActual + 1;
-            }
-            else
-            {
-                nuevoFolio++;
-                nuevoAsiento = 1;
-            }
-
-            // IMPORTANTE:
-            // Todavía no programamos el cambio automático de tomo,
-            // porque esa regla está pendiente de confirmación.
+            var (nuevoTomo, nuevoFolio, nuevoAsiento) =
+                CalcularSiguientePosicionLibro(configuracion);
 
             // ----------------------------------------------------
             // 6. Completar y registrar el activo
@@ -315,27 +295,8 @@ public class InventarioService
             // 6. Calcular siguiente posición del libro
             // ----------------------------------------------------
 
-            int nuevoTomo = configuracion.TomoActual;
-            int nuevoFolio = configuracion.FolioActual;
-            int nuevoAsiento;
-
-            if (configuracion.AsientoActual == 0)
-            {
-                nuevoAsiento = 1;
-            }
-            else if (configuracion.AsientoActual <
-                     configuracion.AsientosPorFolio)
-            {
-                nuevoAsiento = configuracion.AsientoActual + 1;
-            }
-            else
-            {
-                nuevoFolio++;
-                nuevoAsiento = 1;
-            }
-
-            // El cambio automático de tomo sigue pendiente
-            // hasta confirmar la regla institucional.
+            var (nuevoTomo, nuevoFolio, nuevoAsiento) =
+                CalcularSiguientePosicionLibro(configuracion);
 
             // ----------------------------------------------------
             // 7. Crear movimiento histórico
@@ -505,27 +466,8 @@ public class InventarioService
             }
 
             // 6. Calcular siguiente posición del libro
-            int nuevoTomo = configuracion.TomoActual;
-            int nuevoFolio = configuracion.FolioActual;
-            int nuevoAsiento;
-
-            if (configuracion.AsientoActual == 0)
-            {
-                nuevoAsiento = 1;
-            }
-            else if (configuracion.AsientoActual <
-                     configuracion.AsientosPorFolio)
-            {
-                nuevoAsiento = configuracion.AsientoActual + 1;
-            }
-            else
-            {
-                nuevoFolio++;
-                nuevoAsiento = 1;
-            }
-
-            // Cambio automático de tomo:
-            // pendiente hasta confirmar regla institucional.
+            var (nuevoTomo, nuevoFolio, nuevoAsiento) =
+                CalcularSiguientePosicionLibro(configuracion);
 
             // 7. Crear movimiento
             var movimiento = new MovimientoInventario
@@ -682,26 +624,8 @@ public class InventarioService
             }
 
             // 6. Calcular siguiente posición del libro
-            int nuevoTomo = configuracion.TomoActual;
-            int nuevoFolio = configuracion.FolioActual;
-            int nuevoAsiento;
-
-            if (configuracion.AsientoActual == 0)
-            {
-                nuevoAsiento = 1;
-            }
-            else if (configuracion.AsientoActual <
-                     configuracion.AsientosPorFolio)
-            {
-                nuevoAsiento = configuracion.AsientoActual + 1;
-            }
-            else
-            {
-                nuevoFolio++;
-                nuevoAsiento = 1;
-            }
-
-            // Cambio automático de tomo sigue pendiente de confirmar.
+            var (nuevoTomo, nuevoFolio, nuevoAsiento) =
+                CalcularSiguientePosicionLibro(configuracion);
 
             // 7. Aplicar modificaciones permitidas
             activo.Descripcion = descripcion.Trim();
@@ -866,27 +790,8 @@ public class InventarioService
             }
 
             // 8. Calcular siguiente posición del libro
-            int nuevoTomo = configuracion.TomoActual;
-            int nuevoFolio = configuracion.FolioActual;
-            int nuevoAsiento;
-
-            if (configuracion.AsientoActual == 0)
-            {
-                nuevoAsiento = 1;
-            }
-            else if (configuracion.AsientoActual <
-                     configuracion.AsientosPorFolio)
-            {
-                nuevoAsiento = configuracion.AsientoActual + 1;
-            }
-            else
-            {
-                nuevoFolio++;
-                nuevoAsiento = 1;
-            }
-
-            // Cambio automático de tomo:
-            // pendiente hasta confirmar la regla institucional.
+            var (nuevoTomo, nuevoFolio, nuevoAsiento) =
+                CalcularSiguientePosicionLibro(configuracion);
 
             // 9. Crear movimiento histórico
             var movimiento = new MovimientoInventario
@@ -958,6 +863,66 @@ public class InventarioService
             await transaction.RollbackAsync();
             throw;
         }
+    }
+
+    private static (int Tomo, int Folio, int Asiento)
+        CalcularSiguientePosicionLibro(ConfiguracionInventario configuracion)
+    {
+        const int FoliosPorTomo = 1000;
+
+        int nuevoTomo = configuracion.TomoActual;
+        int nuevoFolio = configuracion.FolioActual;
+        int nuevoAsiento = configuracion.AsientoActual;
+
+        if (nuevoTomo <= 0)
+        {
+            throw new InvalidOperationException(
+                "El tomo actual de la configuración no es válido.");
+        }
+
+        if (nuevoFolio <= 0 || nuevoFolio > FoliosPorTomo)
+        {
+            throw new InvalidOperationException(
+                "El folio actual de la configuración no es válido.");
+        }
+
+        if (configuracion.AsientosPorFolio <= 0)
+        {
+            throw new InvalidOperationException(
+                "La cantidad de asientos por folio no es válida.");
+        }
+
+        if (nuevoAsiento < 0 ||
+            nuevoAsiento > configuracion.AsientosPorFolio)
+        {
+            throw new InvalidOperationException(
+                "El asiento actual de la configuración no es válido.");
+        }
+
+        if (nuevoAsiento == 0)
+        {
+            nuevoAsiento = 1;
+        }
+        else if (nuevoAsiento < configuracion.AsientosPorFolio)
+        {
+            nuevoAsiento++;
+        }
+        else
+        {
+            nuevoAsiento = 1;
+
+            if (nuevoFolio < FoliosPorTomo)
+            {
+                nuevoFolio++;
+            }
+            else
+            {
+                nuevoTomo++;
+                nuevoFolio = 1;
+            }
+        }
+
+        return (nuevoTomo, nuevoFolio, nuevoAsiento);
     }
 
 }

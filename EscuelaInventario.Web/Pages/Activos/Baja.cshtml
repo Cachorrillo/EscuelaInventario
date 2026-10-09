@@ -68,7 +68,6 @@
 
     </div>
 
-
     <div class="alert alert-warning">
         <strong>Importante:</strong>
         esta operación no elimina el activo.
@@ -76,7 +75,6 @@
         pero su situación administrativa cambiará a
         <strong>Dado de baja</strong>.
     </div>
-
 
     <div class="row">
 
@@ -100,7 +98,6 @@
             </div>
 
         </div>
-
 
         <div class="col-md-6">
 
@@ -127,24 +124,21 @@
 
     </div>
 
-
     <div class="mb-3">
 
-        <label asp-for="Input.Motivo"
-               class="form-label">
-            Motivo de la baja *
+        <label class="form-label">
+            Motivo de la baja
         </label>
 
-        <input asp-for="Input.Motivo"
-               class="form-control"
-               placeholder="Ej. Activo fuera de servicio" />
+        <input class="form-control"
+               value="Inservibilidad"
+               disabled />
 
-        <span asp-validation-for="Input.Motivo"
-              class="text-danger">
-        </span>
+        <div class="form-text">
+            Según la regla institucional, toda baja se registra por inservibilidad.
+        </div>
 
     </div>
-
 
     <div class="mb-4">
 
@@ -160,7 +154,6 @@
         </textarea>
 
     </div>
-
 
     <div class="d-flex gap-2">
 
@@ -178,7 +171,6 @@
     </div>
 
 </form>
-
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -25,11 +25,12 @@
     <div>
         <h1>Áreas</h1>
         <p class="text-muted">
-            Administración de áreas o ubicaciones del inventario.
+            Administración de áreas del inventario.
         </p>
     </div>
 
-    <a asp-page="Create" class="btn btn-primary">
+    <a asp-page="Create"
+       class="btn btn-primary">
         Nueva área
     </a>
 </div>
@@ -37,8 +38,7 @@
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <th>Número</th>
-            <th>Nombre</th>
+            <th>Número de área</th>
             <th>Estado</th>
             <th>Observaciones</th>
             <th>Acciones</th>
@@ -50,20 +50,27 @@
         {
             <tr>
                 <td>@area.Numero</td>
-                <td>@area.Nombre</td>
 
                 <td>
                     @if (area.Activa)
                     {
-                        <span class="badge bg-success">Activa</span>
+                        <span class="badge bg-success">
+                            Activa
+                        </span>
                     }
                     else
                     {
-                        <span class="badge bg-secondary">Inactiva</span>
+                        <span class="badge bg-secondary">
+                            Inactiva
+                        </span>
                     }
                 </td>
 
-                <td>@area.Observaciones</td>
+                <td>
+                    @(string.IsNullOrWhiteSpace(area.Observaciones)
+                        ? "-"
+                        : area.Observaciones)
+                </td>
 
                 <td>
                     <div class="d-flex gap-2">
@@ -93,7 +100,9 @@
             const mensaje = document.getElementById('mensajeExito');
 
             if (mensaje) {
-                const alerta = bootstrap.Alert.getOrCreateInstance(mensaje);
+                const alerta =
+                    bootstrap.Alert.getOrCreateInstance(mensaje);
+
                 alerta.close();
             }
         }, 3000);

@@ -8,7 +8,7 @@
 <h1>Nueva área</h1>
 
 <p class="text-muted">
-    Registre una nueva área o ubicación del inventario.
+    Registre una nueva área del inventario.
 </p>
 
 <hr />
@@ -25,27 +25,13 @@
             <div class="mb-3">
                 <label asp-for="Area.Numero"
                        class="form-label">
-                    Número
+                    Número de área
                 </label>
 
                 <input asp-for="Area.Numero"
                        class="form-control" />
 
                 <span asp-validation-for="Area.Numero"
-                      class="text-danger">
-                </span>
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="Area.Nombre"
-                       class="form-label">
-                    Nombre
-                </label>
-
-                <input asp-for="Area.Nombre"
-                       class="form-control" />
-
-                <span asp-validation-for="Area.Nombre"
                       class="text-danger">
                 </span>
             </div>

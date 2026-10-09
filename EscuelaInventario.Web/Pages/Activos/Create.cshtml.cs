@@ -90,7 +90,6 @@ public class CreateModel : PageModel
             return Page();
         }
 
-        // Validamos que el área siga existiendo y esté activa.
         bool areaValida = await _context.Areas
             .AnyAsync(a =>
                 a.Id == Input.AreaActualId &&
@@ -103,7 +102,6 @@ public class CreateModel : PageModel
                 "El área seleccionada no es válida o se encuentra inactiva.");
         }
 
-        // Validamos que el estado exista y esté habilitado.
         bool estadoValido = await _context.EstadoActivos
             .AnyAsync(e =>
                 e.Id == Input.EstadoActivoId &&
@@ -116,8 +114,6 @@ public class CreateModel : PageModel
                 "El estado seleccionado no es válido.");
         }
 
-        // Modo de adquisición es opcional,
-        // pero si se selecciona debe estar activo.
         if (Input.ModoAdquisicionId.HasValue)
         {
             bool modoValido = await _context.ModoAdquisicions
@@ -133,7 +129,6 @@ public class CreateModel : PageModel
             }
         }
 
-        // Responsable también es opcional.
         if (Input.ResponsableId.HasValue)
         {
             bool responsableValido = await _context.Responsables
@@ -156,7 +151,6 @@ public class CreateModel : PageModel
 
         var activo = new Activo
         {
-            // Placa será asignada por InventarioService.
             Placa = string.Empty,
 
             Descripcion = Input.Descripcion.Trim(),
@@ -171,7 +165,6 @@ public class CreateModel : PageModel
             AreaActualId = Input.AreaActualId,
             EstadoActivoId = Input.EstadoActivoId,
 
-            // La situación también la asigna InventarioService.
             SituacionActivoId = 0,
 
             ModoAdquisicionId = Input.ModoAdquisicionId,
@@ -210,7 +203,7 @@ public class CreateModel : PageModel
             .Select(a => new SelectListItem
             {
                 Value = a.Id.ToString(),
-                Text = $"Área {a.Numero} - {a.Nombre}"
+                Text = $"Área {a.Numero}"
             })
             .ToListAsync();
 

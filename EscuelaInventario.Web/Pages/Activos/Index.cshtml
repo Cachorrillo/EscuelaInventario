@@ -8,6 +8,7 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
         <h1>Inventario general</h1>
+
         <p class="text-muted">
             Consulta de los activos registrados en la institución.
         </p>
@@ -19,64 +20,327 @@
     </a>
 </div>
 
-<table class="table table-striped table-bordered align-middle">
-    <thead>
-        <tr>
-            <th>Placa</th>
-            <th>Descripción</th>
-            <th>Área actual</th>
-            <th>Estado</th>
-            <th>Situación</th>
-            <th>Marca</th>
-            <th>Modelo</th>
-            <th>Serie</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
 
-    <tbody>
-        @foreach (var activo in Model.Activos)
-        {
-            <tr>
-                <td>@activo.Placa</td>
+<!-- FILTROS -->
+<div class="card mb-4">
 
-                <td>@activo.Descripcion</td>
+    <div class="card-header">
+        <strong>Filtros de búsqueda</strong>
+    </div>
 
-                <td>
-                    @activo.AreaActual?.Nombre
-                </td>
+    <div class="card-body">
 
-                <td>
-                    @activo.EstadoActivo?.Nombre
-                </td>
+        <form method="get">
 
-                <td>
-                    @if (activo.SituacionActivo?.Codigo == "ACTIVO")
-                    {
-                        <span class="badge bg-success">
-                            @activo.SituacionActivo.Nombre
-                        </span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-secondary">
-                            @activo.SituacionActivo?.Nombre
-                        </span>
-                    }
-                </td>
+            <div class="row">
 
-                <td>@activo.Marca</td>
-                <td>@activo.Modelo</td>
-                <td>@activo.Serie</td>
+                <div class="col-md-3">
+                    <div class="mb-3">
 
-                <td>
-                    <a asp-page="Details"
-                       asp-route-id="@activo.Id"
-                       class="btn btn-sm btn-outline-primary">
-                        Ver
+                        <label asp-for="Placa"
+                               class="form-label">
+                            Últimos números de placa
+                        </label>
+
+                        <input asp-for="Placa"
+                               class="form-control"
+                               placeholder="Ej. 0004" />
+
+                    </div>
+                </div>
+
+
+                <div class="col-md-3">
+                    <div class="mb-3">
+
+                        <label asp-for="Buscar"
+                               class="form-label">
+                            Búsqueda general
+                        </label>
+
+                        <input asp-for="Buscar"
+                               class="form-control"
+                               placeholder="Descripción, marca, modelo o serie" />
+
+                    </div>
+                </div>
+
+
+                <div class="col-md-2">
+                    <div class="mb-3">
+
+                        <label asp-for="AreaId"
+                               class="form-label">
+                            Área actual
+                        </label>
+
+                        <select asp-for="AreaId"
+                                asp-items="Model.Areas"
+                                class="form-select">
+
+                            <option value="">
+                                Todas
+                            </option>
+
+                        </select>
+
+                    </div>
+                </div>
+
+
+                <div class="col-md-2">
+                    <div class="mb-3">
+
+                        <label asp-for="EstadoId"
+                               class="form-label">
+                            Estado
+                        </label>
+
+                        <select asp-for="EstadoId"
+                                asp-items="Model.Estados"
+                                class="form-select">
+
+                            <option value="">
+                                Todos
+                            </option>
+
+                        </select>
+
+                    </div>
+                </div>
+
+
+                <div class="col-md-2">
+                    <div class="mb-3">
+
+                        <label asp-for="SituacionId"
+                               class="form-label">
+                            Situación
+                        </label>
+
+                        <select asp-for="SituacionId"
+                                asp-items="Model.Situaciones"
+                                class="form-select">
+
+                            <option value="">
+                                Todas
+                            </option>
+
+                        </select>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="d-flex gap-2">
+
+                <button type="submit"
+                        class="btn btn-primary">
+                    Filtrar
+                </button>
+
+                <a asp-page="Index"
+                   class="btn btn-outline-secondary">
+                    Limpiar filtros
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- CONTADOR -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+    <div>
+        <strong>Resultados:</strong>
+        @Model.TotalRegistros
+    </div>
+
+    @if (Model.TotalPaginas > 0)
+    {
+        <div class="text-muted">
+            Página @Model.Pagina de @Model.TotalPaginas
+        </div>
+    }
+
+</div>
+
+
+<!-- TABLA -->
+@if (!Model.Activos.Any())
+{
+    <div class="alert alert-info">
+        No se encontraron activos con los filtros seleccionados.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+
+        <table class="table table-striped table-bordered align-middle">
+
+            <thead>
+                <tr>
+                    <th>Placa</th>
+                    <th>Descripción</th>
+                    <th>Área original</th>
+                    <th>Área actual</th>
+                    <th>Estado</th>
+                    <th>Situación</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Serie</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var activo in Model.Activos)
+                {
+                    Model.AreasOriginales.TryGetValue(
+                        activo.Id,
+                        out int? areaOriginal);
+
+                    <tr>
+
+                        <td>
+                            @activo.Placa
+                        </td>
+
+                        <td>
+                            @activo.Descripcion
+                        </td>
+
+                        <td>
+                            @(areaOriginal.HasValue
+                                ? $"Área {areaOriginal.Value}"
+                                : "-")
+                        </td>
+
+                        <td>
+                            @(activo.AreaActual != null
+                                ? $"Área {activo.AreaActual.Numero}"
+                                : "-")
+                        </td>
+
+                        <td>
+                            @(activo.EstadoActivo?.Nombre ?? "-")
+                        </td>
+
+                        <td>
+
+                            @if (activo.SituacionActivo?.Codigo == "ACTIVO")
+                            {
+                                <span class="badge bg-success">
+                                    @activo.SituacionActivo.Nombre
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">
+                                    @activo.SituacionActivo?.Nombre
+                                </span>
+                            }
+
+                        </td>
+
+                        <td>
+                            @(activo.Marca ?? "-")
+                        </td>
+
+                        <td>
+                            @(activo.Modelo ?? "-")
+                        </td>
+
+                        <td>
+                            @(activo.Serie ?? "-")
+                        </td>
+
+                        <td>
+                            <a asp-page="Details"
+                               asp-route-id="@activo.Id"
+                               class="btn btn-sm btn-outline-primary">
+                                Ver
+                            </a>
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+}
+
+
+<!-- PAGINACIÓN -->
+@if (Model.TotalPaginas > 1)
+{
+    <nav aria-label="Paginación del inventario">
+
+        <ul class="pagination justify-content-center mt-4">
+
+            <li class="page-item @(Model.Pagina <= 1 ? "disabled" : "")">
+
+                <a class="page-link"
+                   asp-page="Index"
+                   asp-route-Pagina="@(Model.Pagina - 1)"
+                   asp-route-Placa="@Model.Placa"
+                   asp-route-Buscar="@Model.Buscar"
+                   asp-route-AreaId="@Model.AreaId"
+                   asp-route-EstadoId="@Model.EstadoId"
+                   asp-route-SituacionId="@Model.SituacionId">
+                    Anterior
+                </a>
+
+            </li>
+
+
+            @for (int i = 1; i <= Model.TotalPaginas; i++)
+            {
+                <li class="page-item @(i == Model.Pagina ? "active" : "")">
+
+                    <a class="page-link"
+                       asp-page="Index"
+                       asp-route-Pagina="@i"
+                       asp-route-Placa="@Model.Placa"
+                       asp-route-Buscar="@Model.Buscar"
+                       asp-route-AreaId="@Model.AreaId"
+                       asp-route-EstadoId="@Model.EstadoId"
+                       asp-route-SituacionId="@Model.SituacionId">
+                        @i
                     </a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+                </li>
+            }
+
+
+            <li class="page-item @(Model.Pagina >= Model.TotalPaginas ? "disabled" : "")">
+
+                <a class="page-link"
+                   asp-page="Index"
+                   asp-route-Pagina="@(Model.Pagina + 1)"
+                   asp-route-Placa="@Model.Placa"
+                   asp-route-Buscar="@Model.Buscar"
+                   asp-route-AreaId="@Model.AreaId"
+                   asp-route-EstadoId="@Model.EstadoId"
+                   asp-route-SituacionId="@Model.SituacionId">
+                    Siguiente
+                </a>
+
+            </li>
+
+        </ul>
+
+    </nav>
+}

@@ -43,10 +43,6 @@ public class BajaModel : PageModel
 
         public int? ResponsableId { get; set; }
 
-        [Required(ErrorMessage = "Debe indicar el motivo de la baja.")]
-        [StringLength(500)]
-        public string Motivo { get; set; } = string.Empty;
-
         public string? Observacion { get; set; }
     }
 
@@ -85,7 +81,7 @@ public class BajaModel : PageModel
                     Input.ActivoId,
                     Input.FechaMovimiento,
                     Input.ResponsableId,
-                    Input.Motivo.Trim(),
+                    "Inservibilidad",
                     LimpiarTexto(Input.Observacion));
 
             TempData["MensajeExito"] =
@@ -121,7 +117,7 @@ public class BajaModel : PageModel
         Descripcion = activo.Descripcion;
 
         AreaActual =
-            $"Área {activo.AreaActual.Numero} - {activo.AreaActual.Nombre}";
+            $"Área {activo.AreaActual.Numero}";
 
         EstadoActual = activo.EstadoActivo.Nombre;
         SituacionActual = activo.SituacionActivo.Nombre;

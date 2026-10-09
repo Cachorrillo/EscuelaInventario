@@ -46,14 +46,16 @@ public class EditModel : PageModel
             return NotFound();
         }
 
-        areaDb.Nombre = Area.Nombre;
+        // El número de área no se modifica.
+        // El nombre ya no se utiliza, por lo que tampoco lo modificamos.
         areaDb.Observaciones = Area.Observaciones;
         areaDb.Activa = Area.Activa;
         areaDb.FechaModificacion = DateTime.Now;
 
         await _context.SaveChangesAsync();
 
-        TempData["MensajeExito"] = "Área actualizada correctamente.";
+        TempData["MensajeExito"] =
+            "Área actualizada correctamente.";
 
         return RedirectToPage("Index");
     }
