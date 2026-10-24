@@ -2,7 +2,6 @@ using EscuelaInventario.Web.Data;
 using EscuelaInventario.Web.Services;
 using Microsoft.EntityFrameworkCore;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Razor Pages
@@ -14,6 +13,9 @@ builder.Services.AddDbContext<EscuelaInventarioContext>(options =>
         builder.Configuration.GetConnectionString("EscuelaInventarioConnection")));
 
 builder.Services.AddScoped<InventarioService>();
+
+// Servicio para crear respaldos de SQL Server
+builder.Services.AddScoped<BackupService>();
 
 var app = builder.Build();
 
@@ -31,6 +33,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapStaticAssets();
+
 app.MapRazorPages()
    .WithStaticAssets();
 

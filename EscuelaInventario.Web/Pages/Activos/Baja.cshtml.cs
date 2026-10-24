@@ -117,9 +117,11 @@ public class BajaModel : PageModel
         Descripcion = activo.Descripcion;
 
         AreaActual =
-            $"Área {activo.AreaActual.Numero}";
+            activo.AreaActual != null
+                ? $"Área {activo.AreaActual.Numero}"
+                : "Sin área oficial asignada";
 
-        EstadoActual = activo.EstadoActivo.Nombre;
+        EstadoActual = activo.EstadoActivo?.Nombre ?? "Sin estado registrado";
         SituacionActual = activo.SituacionActivo.Nombre;
 
         Responsables = await _context.Responsables

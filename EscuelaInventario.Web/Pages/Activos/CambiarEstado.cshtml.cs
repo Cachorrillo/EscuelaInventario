@@ -121,7 +121,7 @@ public class CambiarEstadoModel : PageModel
 
         Placa = activo.Placa;
         Descripcion = activo.Descripcion;
-        EstadoActual = activo.EstadoActivo.Nombre;
+        EstadoActual = activo.EstadoActivo?.Nombre ?? "Sin estado registrado";
 
         Estados = await _context.EstadoActivos
             .Where(e =>

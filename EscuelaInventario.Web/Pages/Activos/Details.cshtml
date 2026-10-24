@@ -81,7 +81,9 @@
             <div class="col-md-4">
                 <strong>Área actual</strong>
                 <div>
-                    Área @Model.Activo.AreaActual.Numero
+                    @(Model.Activo.AreaActual != null
+                        ? $"Área {Model.Activo.AreaActual.Numero}"
+                        : "Sin área oficial asignada")
                 </div>
             </div>
 
@@ -91,7 +93,7 @@
 
             <div class="col-md-3">
                 <strong>Estado físico</strong>
-                <div>@Model.Activo.EstadoActivo.Nombre</div>
+                <div>@(Model.Activo.EstadoActivo?.Nombre ?? "Sin estado registrado")</div>
             </div>
 
             <div class="col-md-3">
@@ -156,6 +158,18 @@
 
         </div>
 
+        @if (!string.IsNullOrWhiteSpace(Model.Activo.UbicacionHistorica))
+        {
+            <div class="row mb-3">
+                <div class="col-12">
+                    <strong>Ubicación histórica</strong>
+                    <div>
+                        @Model.Activo.UbicacionHistorica
+                    </div>
+                </div>
+            </div>
+        }
+
         <div class="row">
 
             <div class="col-12">
@@ -217,7 +231,8 @@
                             <tr>
 
                                 <td>
-                                    @movimiento.FechaMovimiento.ToString("dd/MM/yyyy")
+                                    @(movimiento.FechaMovimiento?.ToString("dd/MM/yyyy")
+                                                                 ?? "Fecha no registrada")
                                 </td>
 
                                 <td>

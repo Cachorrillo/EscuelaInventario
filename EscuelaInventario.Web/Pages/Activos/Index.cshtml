@@ -286,9 +286,19 @@ else
 <!-- PAGINACIÓN -->
 @if (Model.TotalPaginas > 1)
 {
+    int paginasAlrededor = 2;
+
+    int paginaInicial = Math.Max(
+        1,
+        Model.Pagina - paginasAlrededor);
+
+    int paginaFinal = Math.Min(
+        Model.TotalPaginas,
+        Model.Pagina + paginasAlrededor);
+
     <nav aria-label="Paginación del inventario">
 
-        <ul class="pagination justify-content-center mt-4">
+        <ul class="pagination justify-content-center mt-4 flex-wrap">
 
             <li class="page-item @(Model.Pagina <= 1 ? "disabled" : "")">
 
@@ -306,7 +316,36 @@ else
             </li>
 
 
-            @for (int i = 1; i <= Model.TotalPaginas; i++)
+            @if (paginaInicial > 1)
+            {
+                <li class="page-item @(Model.Pagina == 1 ? "active" : "")">
+
+                    <a class="page-link"
+                       asp-page="Index"
+                       asp-route-Pagina="1"
+                       asp-route-Placa="@Model.Placa"
+                       asp-route-Buscar="@Model.Buscar"
+                       asp-route-AreaId="@Model.AreaId"
+                       asp-route-EstadoId="@Model.EstadoId"
+                       asp-route-SituacionId="@Model.SituacionId">
+                        1
+                    </a>
+
+                </li>
+            }
+
+
+            @if (paginaInicial > 2)
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">
+                        ...
+                    </span>
+                </li>
+            }
+
+
+            @for (int i = paginaInicial; i <= paginaFinal; i++)
             {
                 <li class="page-item @(i == Model.Pagina ? "active" : "")">
 
@@ -319,6 +358,35 @@ else
                        asp-route-EstadoId="@Model.EstadoId"
                        asp-route-SituacionId="@Model.SituacionId">
                         @i
+                    </a>
+
+                </li>
+            }
+
+
+            @if (paginaFinal < Model.TotalPaginas - 1)
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">
+                        ...
+                    </span>
+                </li>
+            }
+
+
+            @if (paginaFinal < Model.TotalPaginas)
+            {
+                <li class="page-item @(Model.Pagina == Model.TotalPaginas ? "active" : "")">
+
+                    <a class="page-link"
+                       asp-page="Index"
+                       asp-route-Pagina="@Model.TotalPaginas"
+                       asp-route-Placa="@Model.Placa"
+                       asp-route-Buscar="@Model.Buscar"
+                       asp-route-AreaId="@Model.AreaId"
+                       asp-route-EstadoId="@Model.EstadoId"
+                       asp-route-SituacionId="@Model.SituacionId">
+                        @Model.TotalPaginas
                     </a>
 
                 </li>

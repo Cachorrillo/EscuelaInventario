@@ -34,9 +34,9 @@ public partial class Activo
     [Column(TypeName = "decimal(18, 2)")]
     public decimal? Precio { get; set; }
 
-    public int AreaActualId { get; set; }
+    public int? AreaActualId { get; set; }
 
-    public int EstadoActivoId { get; set; }
+    public int? EstadoActivoId { get; set; }
 
     public int SituacionActivoId { get; set; }
 
@@ -44,17 +44,20 @@ public partial class Activo
 
     public string? Observaciones { get; set; }
 
+    [StringLength(250)]
+    public string? UbicacionHistorica { get; set; }
+
     public DateTime FechaCreacion { get; set; }
 
     public DateTime? FechaModificacion { get; set; }
 
     [ForeignKey("AreaActualId")]
     [InverseProperty("Activos")]
-    public virtual Area AreaActual { get; set; } = null!;
+    public virtual Area? AreaActual { get; set; } = null!;
 
     [ForeignKey("EstadoActivoId")]
     [InverseProperty("Activos")]
-    public virtual EstadoActivo EstadoActivo { get; set; } = null!;
+    public virtual EstadoActivo? EstadoActivo { get; set; } = null!;
 
     [ForeignKey("ModoAdquisicionId")]
     [InverseProperty("Activos")]

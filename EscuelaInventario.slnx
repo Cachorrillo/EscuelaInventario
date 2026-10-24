@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="EscuelaInventario.Migracion/EscuelaInventario.Migracion.csproj" Id="0103435a-b875-487c-953d-89ce257f034e" />
   <Project Path="EscuelaInventario.Web/EscuelaInventario.Web.csproj" />
 </Solution>

@@ -1,10 +1,11 @@
-using System.ComponentModel.DataAnnotations;
 using EscuelaInventario.Web.Data;
+using EscuelaInventario.Web.Models;
 using EscuelaInventario.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace EscuelaInventario.Web.Pages.Activos;
 
@@ -136,8 +137,8 @@ public class EditarModel : PageModel
     }
 
     private async Task<bool> CargarDatosAsync(
-        int activoId,
-        bool cargarInput)
+    int activoId,
+    bool cargarInput)
     {
         var activo = await _context.Activos
             .Include(a => a.AreaActual)
@@ -153,9 +154,11 @@ public class EditarModel : PageModel
         Placa = activo.Placa;
 
         AreaActual =
-            $"Área {activo.AreaActual.Numero}";
+            activo.AreaActual != null
+                ? $"Área {activo.AreaActual.Numero}"
+                : "Sin área oficial asignada";
 
-        EstadoActual = activo.EstadoActivo.Nombre;
+        EstadoActual = activo.EstadoActivo?.Nombre ?? "Sin estado registrado";
         SituacionActual = activo.SituacionActivo.Nombre;
 
         if (cargarInput)

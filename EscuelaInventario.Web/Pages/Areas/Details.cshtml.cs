@@ -21,13 +21,15 @@ public class DetailsModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
-        Area = await _context.Areas
+        var area = await _context.Areas
             .FirstOrDefaultAsync(a => a.Id == id);
 
-        if (Area == null)
+        if (area == null)
         {
             return NotFound();
         }
+
+        Area = area;
 
         Activos = await _context.Activos
             .Where(a => a.AreaActualId == id)

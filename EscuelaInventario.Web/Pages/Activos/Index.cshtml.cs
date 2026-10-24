@@ -10,7 +10,6 @@ namespace EscuelaInventario.Web.Pages.Activos;
 public class IndexModel : PageModel
 {
     private readonly EscuelaInventarioContext _context;
-
     private const int TamanoPagina = 50;
 
     public IndexModel(EscuelaInventarioContext context)
@@ -19,9 +18,7 @@ public class IndexModel : PageModel
     }
 
     public List<Activo> Activos { get; set; } = new();
-
     public Dictionary<int, int?> AreasOriginales { get; set; } = new();
-
     public List<SelectListItem> Areas { get; set; } = new();
     public List<SelectListItem> Estados { get; set; } = new();
     public List<SelectListItem> Situaciones { get; set; } = new();
@@ -45,7 +42,6 @@ public class IndexModel : PageModel
     public int Pagina { get; set; } = 1;
 
     public int TotalRegistros { get; set; }
-
     public int TotalPaginas { get; set; }
 
     public async Task OnGetAsync()
@@ -58,21 +54,12 @@ public class IndexModel : PageModel
             .Include(a => a.SituacionActivo)
             .AsQueryable();
 
-        // ---------------------------------------------------------
-        // Filtro por últimos números de placa
-        // Ejemplo: escribir 0004 encuentra 4615-0004
-        // ---------------------------------------------------------
         if (!string.IsNullOrWhiteSpace(Placa))
         {
             string placaBuscada = Placa.Trim();
-
-            consulta = consulta.Where(a =>
-                a.Placa.EndsWith(placaBuscada));
+            consulta = consulta.Where(a => a.Placa.EndsWith(placaBuscada));
         }
 
-        // ---------------------------------------------------------
-        // Búsqueda general
-        // ---------------------------------------------------------
         if (!string.IsNullOrWhiteSpace(Buscar))
         {
             string texto = Buscar.Trim();
@@ -84,36 +71,21 @@ public class IndexModel : PageModel
                 (a.Serie != null && a.Serie.Contains(texto)));
         }
 
-        // ---------------------------------------------------------
-        // Área actual
-        // ---------------------------------------------------------
         if (AreaId.HasValue)
         {
-            consulta = consulta.Where(a =>
-                a.AreaActualId == AreaId.Value);
+            consulta = consulta.Where(a => a.AreaActualId == AreaId.Value);
         }
 
-        // ---------------------------------------------------------
-        // Estado físico
-        // ---------------------------------------------------------
         if (EstadoId.HasValue)
         {
-            consulta = consulta.Where(a =>
-                a.EstadoActivoId == EstadoId.Value);
+            consulta = consulta.Where(a => a.EstadoActivoId == EstadoId.Value);
         }
 
-        // ---------------------------------------------------------
-        // Situación administrativa
-        // ---------------------------------------------------------
         if (SituacionId.HasValue)
         {
-            consulta = consulta.Where(a =>
-                a.SituacionActivoId == SituacionId.Value);
+            consulta = consulta.Where(a => a.SituacionActivoId == SituacionId.Value);
         }
 
-        // ---------------------------------------------------------
-        // Paginación
-        // ---------------------------------------------------------
         TotalRegistros = await consulta.CountAsync();
 
         TotalPaginas = (int)Math.Ceiling(
@@ -130,14 +102,11 @@ public class IndexModel : PageModel
         }
 
         Activos = await consulta
-            .OrderBy(a => a.Placa)
+            .OrderByDescending(a => a.Placa)
             .Skip((Pagina - 1) * TamanoPagina)
             .Take(TamanoPagina)
             .ToListAsync();
 
-        // ---------------------------------------------------------
-        // Obtener área original de los activos de esta página
-        // ---------------------------------------------------------
         var idsActivos = Activos
             .Select(a => a.Id)
             .ToList();

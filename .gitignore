@@ -1,0 +1,13 @@
+# Visual Studio
+.vs/
+
+# Archivos compilados de .NET
+**/bin/
+**/obj/
+
+# Archivos de datos institucionales usados para migración
+EscuelaInventario.Migracion/Datos/*.xlsx
+EscuelaInventario.Migracion/Datos/*.xls
+
+# Reportes generados por la herramienta de migración
+EscuelaInventario.Migracion/Reportes/*

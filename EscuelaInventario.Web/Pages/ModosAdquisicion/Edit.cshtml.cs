@@ -20,13 +20,15 @@ public class EditModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
-        ModoAdquisicion = await _context.ModoAdquisicions
+        var modoAdquisicion = await _context.ModoAdquisicions
             .FirstOrDefaultAsync(m => m.Id == id);
 
-        if (ModoAdquisicion == null)
+        if (modoAdquisicion == null)
         {
             return NotFound();
         }
+
+        ModoAdquisicion = modoAdquisicion;
 
         return Page();
     }

@@ -20,13 +20,15 @@ public class EditModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
-        Area = await _context.Areas
+        var area = await _context.Areas
             .FirstOrDefaultAsync(a => a.Id == id);
 
-        if (Area == null)
+        if (area == null)
         {
             return NotFound();
         }
+
+        Area = area;
 
         return Page();
     }

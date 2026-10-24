@@ -16,7 +16,7 @@ public partial class MovimientoInventario
 
     public int TipoMovimientoId { get; set; }
 
-    public DateOnly FechaMovimiento { get; set; }
+    public DateOnly? FechaMovimiento { get; set; }
 
     public int? AreaAnteriorId { get; set; }
 

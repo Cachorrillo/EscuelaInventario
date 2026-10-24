@@ -123,7 +123,9 @@ public class TrasladarModel : PageModel
         Descripcion = activo.Descripcion;
 
         AreaActual =
-            $"Área {activo.AreaActual.Numero}";
+            activo.AreaActual != null
+                ? $"Área {activo.AreaActual.Numero}"
+                : "Sin área oficial asignada";
 
         Areas = await _context.Areas
             .Where(a =>

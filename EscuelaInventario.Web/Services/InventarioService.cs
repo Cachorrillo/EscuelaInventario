@@ -239,7 +239,7 @@ public class InventarioService
                     "El área de destino no existe o se encuentra inactiva.");
             }
 
-            int areaAnteriorId = activo.AreaActualId;
+            int? areaAnteriorId = activo.AreaActualId;
 
             if (areaAnteriorId == nuevaAreaId)
             {
@@ -410,7 +410,7 @@ public class InventarioService
                     "El activo seleccionado no existe.");
             }
 
-            int estadoAnteriorId = activo.EstadoActivoId;
+            int? estadoAnteriorId = activo.EstadoActivoId;
 
             // 2. Validar nuevo estado
             var nuevoEstado = await _context.EstadoActivos
@@ -938,7 +938,7 @@ public record ResultadoRegistroActivo(
 
 public record ResultadoTraslado(
     int ActivoId,
-    int AreaAnteriorId,
+    int? AreaAnteriorId,
     int AreaNuevaId,
     int Tomo,
     int Folio,
@@ -947,7 +947,7 @@ public record ResultadoTraslado(
 
 public record ResultadoCambioEstado(
     int ActivoId,
-    int EstadoAnteriorId,
+    int? EstadoAnteriorId,
     int EstadoNuevoId,
     int Tomo,
     int Folio,

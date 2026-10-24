@@ -21,17 +21,19 @@ public class DetailsModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
-        Activo = await _context.Activos
+        var activo = await _context.Activos
             .Include(a => a.AreaActual)
             .Include(a => a.EstadoActivo)
             .Include(a => a.SituacionActivo)
             .Include(a => a.ModoAdquisicion)
             .FirstOrDefaultAsync(a => a.Id == id);
 
-        if (Activo == null)
+        if (activo == null)
         {
             return NotFound();
         }
+
+        Activo = activo;
 
         Movimientos = await _context.MovimientoInventarios
             .Where(m => m.ActivoId == id)

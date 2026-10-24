@@ -20,13 +20,15 @@ public class EditModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
-        Responsable = await _context.Responsables
+        var responsable = await _context.Responsables
             .FirstOrDefaultAsync(r => r.Id == id);
 
-        if (Responsable == null)
+        if (responsable == null)
         {
             return NotFound();
         }
+
+        Responsable = responsable;
 
         return Page();
     }

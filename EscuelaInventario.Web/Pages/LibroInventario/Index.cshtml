@@ -1,0 +1,359 @@
+﻿@page
+@model EscuelaInventario.Web.Pages.LibroInventario.IndexModel
+
+@{
+    ViewData["Title"] = "Libro de inventario";
+}
+
+<div class="d-flex justify-content-between align-items-start mb-3">
+
+    <div>
+        <h1>Libro de inventario</h1>
+
+        <p class="text-muted mb-0">
+            Consulta de los registros del libro en orden de Tomo, Folio y Asiento.
+        </p>
+    </div>
+
+    <a asp-page="/Activos/Index"
+       class="btn btn-outline-secondary">
+        Volver al inventario
+    </a>
+
+</div>
+
+
+@if (Model.UltimoTomo.HasValue)
+{
+    <div class="alert alert-primary mb-4">
+
+        <strong>Última posición registrada:</strong>
+
+        Tomo @Model.UltimoTomo /
+        Folio @Model.UltimoFolio /
+        Asiento @Model.UltimoAsiento
+
+    </div>
+}
+
+
+<!-- FILTROS -->
+<div class="card mb-4">
+
+    <div class="card-header">
+        <strong>Filtros de búsqueda</strong>
+    </div>
+
+    <div class="card-body">
+
+        <form method="get">
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <div class="mb-3">
+
+                        <label asp-for="Placa"
+                               class="form-label">
+                            Placa
+                        </label>
+
+                        <input asp-for="Placa"
+                               class="form-control"
+                               placeholder="Ej. 5375 o 4615-5375" />
+
+                    </div>
+                </div>
+
+
+                <div class="col-md-4">
+                    <div class="mb-3">
+
+                        <label asp-for="TipoMovimiento"
+                               class="form-label">
+                            Tipo de movimiento
+                        </label>
+
+                        <select asp-for="TipoMovimiento"
+                                asp-items="Model.TiposMovimiento"
+                                class="form-select">
+
+                            <option value="">
+                                Todos
+                            </option>
+
+                        </select>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="d-flex gap-2">
+
+                <button type="submit"
+                        class="btn btn-primary">
+                    Filtrar
+                </button>
+
+                <a asp-page="Index"
+                   class="btn btn-outline-secondary">
+                    Limpiar filtros
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- CONTADOR -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+    <div>
+        <strong>Registros:</strong>
+        @Model.TotalRegistros
+    </div>
+
+    @if (Model.TotalPaginas > 0)
+    {
+        <div class="text-muted">
+            Página @Model.Pagina de @Model.TotalPaginas
+        </div>
+    }
+
+</div>
+
+
+<!-- TABLA -->
+@if (!Model.Registros.Any())
+{
+    <div class="alert alert-info">
+        No se encontraron registros con los filtros seleccionados.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+
+        <table class="table table-striped table-bordered align-middle">
+
+            <thead>
+                <tr>
+                    <th>Tomo</th>
+                    <th>Folio</th>
+                    <th>Asiento</th>
+                    <th>Placa</th>
+                    <th>Tipo</th>
+                    <th>Fecha</th>
+                    <th>Descripción</th>
+                    <th>Detalle del registro</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var registro in Model.Registros)
+                {
+                    var movimiento = registro.MovimientoInventario;
+                    var activo = movimiento.Activo;
+
+                    <tr>
+
+                        <td>
+                            @registro.Tomo
+                        </td>
+
+                        <td>
+                            @registro.Folio
+                        </td>
+
+                        <td>
+                            @registro.Asiento
+                        </td>
+
+                        <td class="text-nowrap">
+                            @activo.Placa
+                        </td>
+
+                        <td class="text-nowrap">
+                            @movimiento.TipoMovimiento.Nombre
+                        </td>
+
+                        <td class="text-nowrap">
+                            @(movimiento.FechaMovimiento?.ToString("dd/MM/yyyy")
+                                ?? "Fecha no registrada")
+                        </td>
+
+                        <td>
+                            @activo.Descripcion
+                        </td>
+
+                        <td style="min-width: 320px;">
+
+                            @if (!string.IsNullOrWhiteSpace(registro.TextoOriginal))
+                            {
+                                @registro.TextoOriginal
+                            }
+                            else if (!string.IsNullOrWhiteSpace(movimiento.Observacion))
+                            {
+                                @movimiento.Observacion
+                            }
+                            else if (!string.IsNullOrWhiteSpace(movimiento.Motivo))
+                            {
+                                @movimiento.Motivo
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+
+                        </td>
+
+                        <td class="text-nowrap">
+
+                            <a asp-page="/Activos/Details"
+                               asp-route-id="@activo.Id"
+                               class="btn btn-sm btn-outline-primary">
+                                Ver activo
+                            </a>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+}
+
+
+<!-- PAGINACIÓN -->
+@if (Model.TotalPaginas > 1)
+{
+    int paginasAlrededor = 2;
+
+    int paginaInicial = Math.Max(
+        1,
+        Model.Pagina - paginasAlrededor);
+
+    int paginaFinal = Math.Min(
+        Model.TotalPaginas,
+        Model.Pagina + paginasAlrededor);
+
+    <nav aria-label="Paginación del libro de inventario">
+
+        <ul class="pagination justify-content-center mt-4 flex-wrap">
+
+            <!-- ANTERIOR -->
+            <li class="page-item @(Model.Pagina <= 1 ? "disabled" : "")">
+
+                <a class="page-link"
+                   asp-page="Index"
+                   asp-route-Pagina="@(Model.Pagina - 1)"
+                   asp-route-Placa="@Model.Placa"
+                   asp-route-TipoMovimiento="@Model.TipoMovimiento">
+                    Anterior
+                </a>
+
+            </li>
+
+
+            <!-- PRIMERA PÁGINA -->
+            @if (paginaInicial > 1)
+            {
+                <li class="page-item">
+
+                    <a class="page-link"
+                       asp-page="Index"
+                       asp-route-Pagina="1"
+                       asp-route-Placa="@Model.Placa"
+                       asp-route-TipoMovimiento="@Model.TipoMovimiento">
+                        1
+                    </a>
+
+                </li>
+            }
+
+
+            <!-- PUNTOS SUSPENSIVOS -->
+            @if (paginaInicial > 2)
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">
+                        ...
+                    </span>
+                </li>
+            }
+
+
+            <!-- PÁGINAS CERCANAS -->
+            @for (int i = paginaInicial; i <= paginaFinal; i++)
+            {
+                <li class="page-item @(i == Model.Pagina ? "active" : "")">
+
+                    <a class="page-link"
+                       asp-page="Index"
+                       asp-route-Pagina="@i"
+                       asp-route-Placa="@Model.Placa"
+                       asp-route-TipoMovimiento="@Model.TipoMovimiento">
+                        @i
+                    </a>
+
+                </li>
+            }
+
+
+            <!-- PUNTOS SUSPENSIVOS -->
+            @if (paginaFinal < Model.TotalPaginas - 1)
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">
+                        ...
+                    </span>
+                </li>
+            }
+
+
+            <!-- ÚLTIMA PÁGINA -->
+            @if (paginaFinal < Model.TotalPaginas)
+            {
+                <li class="page-item">
+
+                    <a class="page-link"
+                       asp-page="Index"
+                       asp-route-Pagina="@Model.TotalPaginas"
+                       asp-route-Placa="@Model.Placa"
+                       asp-route-TipoMovimiento="@Model.TipoMovimiento">
+                        @Model.TotalPaginas
+                    </a>
+
+                </li>
+            }
+
+
+            <!-- SIGUIENTE -->
+            <li class="page-item @(Model.Pagina >= Model.TotalPaginas ? "disabled" : "")">
+
+                <a class="page-link"
+                   asp-page="Index"
+                   asp-route-Pagina="@(Model.Pagina + 1)"
+                   asp-route-Placa="@Model.Placa"
+                   asp-route-TipoMovimiento="@Model.TipoMovimiento">
+                    Siguiente
+                </a>
+
+            </li>
+
+        </ul>
+
+    </nav>
+}
