@@ -384,173 +384,200 @@ public class ConsolidadorActivosMigracionService
     }
 
     private static void AgregarDuplicado4678(
-        List<ActivoFinalMigracion> resultado,
-        List<ActivoPreparadoMigracion> filas)
+    List<ActivoFinalMigracion> resultado,
+    List<ActivoPreparadoMigracion> filas)
     {
-        if (filas.Count != 2)
+        // ========================================================
+        // CORTE NUEVO:
+        // La encargada corrigió el duplicado de 4615-4678.
+        // Si solo existe una fila, se trata como un activo normal.
+        // ========================================================
+
+        if (filas.Count == 1)
         {
-            throw new InvalidOperationException(
-                "Se esperaban exactamente dos filas para la placa " +
-                "4615-4678, pero se encontraron " +
-                filas.Count +
-                "."
+            resultado.Add(
+                ConvertirActivoActual(
+                    filas.Single()
+                )
             );
+
+            return;
         }
 
-        var fila1 =
-            filas
-                .OrderBy(
-                    x => x.NumeroFilaExcel
-                )
-                .First();
+        // ========================================================
+        // CORTE ANTERIOR:
+        // Si todavía existen las dos filas históricas conocidas,
+        // se aplica la consolidación especial original.
+        // ========================================================
 
-        var fila2 =
-            filas
-                .OrderBy(
-                    x => x.NumeroFilaExcel
-                )
-                .Last();
+        if (filas.Count == 2)
+        {
+            var fila1 =
+                filas
+                    .OrderBy(
+                        x => x.NumeroFilaExcel
+                    )
+                    .First();
 
-        var motivos =
-            new List<string>();
+            var fila2 =
+                filas
+                    .OrderBy(
+                        x => x.NumeroFilaExcel
+                    )
+                    .Last();
 
-        AgregarMotivo(
-            motivos,
-            "La placa 4615-4678 aparece dos veces en el archivo " +
-            $"de corte, en las filas {fila1.NumeroFilaExcel} y " +
-            $"{fila2.NumeroFilaExcel}. La encargada confirmó que " +
-            "la duplicación corresponde a un error del archivo."
-        );
+            var motivos =
+                new List<string>();
 
-        AgregarMotivo(
-            motivos,
-            "Las dos filas coinciden en placa, descripción, activo, " +
-            "estado, ubicación y fecha de adquisición, pero difieren " +
-            "en modo de adquisición y posición de libro."
-        );
+            AgregarMotivo(
+                motivos,
+                "La placa 4615-4678 aparece dos veces en el archivo " +
+                $"de corte, en las filas {fila1.NumeroFilaExcel} y " +
+                $"{fila2.NumeroFilaExcel}. La encargada confirmó que " +
+                "la duplicación corresponde a un error del archivo."
+            );
 
-        AgregarMotivo(
-            motivos,
-            "No existe evidencia suficiente para elegir entre " +
-            "'Donación' y 'Junta Protección Social'. El modo de " +
-            "adquisición se migra como NULL y se conservan ambos " +
-            "valores como evidencia de la inconsistencia."
-        );
+            AgregarMotivo(
+                motivos,
+                "Las dos filas coinciden en placa, descripción, activo, " +
+                "estado, ubicación y fecha de adquisición, pero difieren " +
+                "en modo de adquisición y posición de libro."
+            );
 
-        AgregarMotivo(
-            motivos,
-            "No existe evidencia suficiente para elegir entre " +
-            "T5/F737/A6 y T5/F748/A7. Ninguna de las dos posiciones " +
-            "se insertará como RegistroLibro de inclusión."
-        );
+            AgregarMotivo(
+                motivos,
+                "No existe evidencia suficiente para elegir entre " +
+                "'Donación' y 'Junta Protección Social'. El modo de " +
+                "adquisición se migra como NULL y se conservan ambos " +
+                "valores como evidencia de la inconsistencia."
+            );
 
-        resultado.Add(
-            new ActivoFinalMigracion
-            {
-                Placa =
-                    "4615-4678",
+            AgregarMotivo(
+                motivos,
+                "No existe evidencia suficiente para elegir entre " +
+                "T5/F737/A6 y T5/F748/A7. Ninguna de las dos posiciones " +
+                "se insertará como RegistroLibro de inclusión."
+            );
 
-                FilasFuente =
-                    filas
-                        .Select(
-                            x => x.NumeroFilaExcel
-                        )
-                        .OrderBy(
-                            x => x
-                        )
-                        .ToList(),
+            resultado.Add(
+                new ActivoFinalMigracion
+                {
+                    Placa =
+                        "4615-4678",
 
-                Descripcion =
-                    fila1.Descripcion,
+                    FilasFuente =
+                        filas
+                            .Select(
+                                x => x.NumeroFilaExcel
+                            )
+                            .OrderBy(
+                                x => x
+                            )
+                            .ToList(),
 
-                Marca =
-                    "Telstar",
+                    Descripcion =
+                        fila1.Descripcion,
 
-                Modelo =
-                    fila1.Modelo,
+                    Marca =
+                        "Telstar",
 
-                Serie =
-                    fila1.Serie,
+                    Modelo =
+                        fila1.Modelo,
 
-                EstadoOriginal =
-                    fila1.EstadoOriginal,
+                    Serie =
+                        fila1.Serie,
 
-                EstadoNormalizado =
-                    fila1.EstadoNormalizado,
+                    EstadoOriginal =
+                        fila1.EstadoOriginal,
 
-                SituacionPreparada =
-                    "ACTIVO",
+                    EstadoNormalizado =
+                        fila1.EstadoNormalizado,
 
-                ClasificacionSituacion =
-                    "ACTIVO_DUPLICADO_FUENTE_CONSOLIDADO",
+                    SituacionPreparada =
+                        "ACTIVO",
 
-                UbicacionOriginal =
-                    "AREA 4",
+                    ClasificacionSituacion =
+                        "ACTIVO_DUPLICADO_FUENTE_CONSOLIDADO",
 
-                AreaActualNumero =
-                    4,
+                    UbicacionOriginal =
+                        "AREA 4",
 
-                UbicacionHistorica =
-                    null,
+                    AreaActualNumero =
+                        4,
 
-                FuenteAreaSeleccionada =
-                    "DUPLICADO_FUENTE_AREA_COMUN",
+                    UbicacionHistorica =
+                        null,
 
-                ModoAdquisicionOriginal =
-                    "DONACIÓN / JPS (CONFLICTO DE FUENTE)",
+                    FuenteAreaSeleccionada =
+                        "DUPLICADO_FUENTE_AREA_COMUN",
 
-                ModoAdquisicionNormalizado =
-                    null,
+                    ModoAdquisicionOriginal =
+                        "DONACIÓN / JPS (CONFLICTO DE FUENTE)",
 
-                PrecioOriginal =
-                    fila1.PrecioOriginal,
+                    ModoAdquisicionNormalizado =
+                        null,
 
-                PrecioNormalizado =
-                    fila1.PrecioNormalizado,
+                    PrecioOriginal =
+                        fila1.PrecioOriginal,
 
-                FechaAdquisicionOriginal =
-                    fila1.FechaAdquisicionOriginal,
+                    PrecioNormalizado =
+                        fila1.PrecioNormalizado,
 
-                FechaAdquisicionNormalizada =
-                    fila1.FechaAdquisicionNormalizada,
+                    FechaAdquisicionOriginal =
+                        fila1.FechaAdquisicionOriginal,
 
-                ObservacionesOriginales =
-                    "Registro duplicado en el archivo fuente. " +
-                    "Fila " +
-                    fila1.NumeroFilaExcel +
-                    ": modo Donación, T5/F737/A6. " +
-                    "Fila " +
-                    fila2.NumeroFilaExcel +
-                    ": modo JPS, T5/F748/A7.",
+                    FechaAdquisicionNormalizada =
+                        fila1.FechaAdquisicionNormalizada,
 
-                TomoOriginal =
-                    null,
+                    ObservacionesOriginales =
+                        "Registro duplicado en el archivo fuente. " +
+                        "Fila " +
+                        fila1.NumeroFilaExcel +
+                        ": modo Donación, T5/F737/A6. " +
+                        "Fila " +
+                        fila2.NumeroFilaExcel +
+                        ": modo JPS, T5/F748/A7.",
 
-                FolioOriginal =
-                    null,
+                    TomoOriginal =
+                        null,
 
-                AsientoOriginal =
-                    null,
+                    FolioOriginal =
+                        null,
 
-                RegistrarPosicionLibroInclusion =
-                    false,
+                    AsientoOriginal =
+                        null,
 
-                PosicionesLibroConflictivas =
-                    new List<string>
-                    {
+                    RegistrarPosicionLibroInclusion =
+                        false,
+
+                    PosicionesLibroConflictivas =
+                        new List<string>
+                        {
                         "T5/F737/A6",
                         "T5/F748/A7"
-                    },
+                        },
 
-                RequiereRevision =
-                    true,
+                    RequiereRevision =
+                        true,
 
-                MotivosRevision =
-                    motivos,
+                    MotivosRevision =
+                        motivos,
 
-                OrigenMigracion =
-                    "INVENTARIO_GENERAL_DUPLICADO_CONSOLIDADO"
-            }
+                    OrigenMigracion =
+                        "INVENTARIO_GENERAL_DUPLICADO_CONSOLIDADO"
+                }
+            );
+
+            return;
+        }
+
+        // ========================================================
+        // CUALQUIER OTRO ESCENARIO ES INESPERADO.
+        // ========================================================
+
+        throw new InvalidOperationException(
+            "La placa 4615-4678 tiene una cantidad inesperada " +
+            $"de registros: {filas.Count}."
         );
     }
 

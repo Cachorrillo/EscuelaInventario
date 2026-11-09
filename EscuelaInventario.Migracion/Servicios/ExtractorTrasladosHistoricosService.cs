@@ -66,7 +66,7 @@ public class ExtractorTrasladosHistoricosService
         var patrones =
             new[]
             {
-                @"(?:fue|fueron)?\s*trasladad[oa]s?\s+de(?:l| la)?\s+(?<origen>.+?)\s+al\s+(?<destino>(?:area|área|aréa)\s*(?:n[º°o.]*)?\s*#?\s*\d{1,3})(?=\s*,?\s*(?:a\s+partir|apartir|partir|desde)\b|\s*[.]?\s*$)",
+                @"(?:fue|fueron)?\s*trasladad[oa]s?\s+de(?:l| la)?\s+(?<origen>.+?)\s+al\s+(?<destino>(?:area|área|ârea|àrea|aréa|áre)\s*(?:n[º°o.]*)?\s*#?\s*\d{1,3})(?=\s*,?\s*(?:a\s+partir|apartir|partir|desde)\b|\s*[.]?\s*$)",
 
                 @"(?:fue|fueron)?\s*trasladad[oa]s?\s+de(?:l| la)?\s+(?<origen>.+?)\s+a(?:l| la)?\s+(?<destino>.+?)(?=\s*,?\s*(?:a\s+partir|apartir|partir|desde)\b|\s*[.]?\s*$)",
 
@@ -163,31 +163,121 @@ public class ExtractorTrasladosHistoricosService
             return null;
         }
 
-        // Solo se convierte a área numérica cuando
-        // el texto dice explícitamente "Área".
+        string texto =
+            ubicacion.Trim();
+
+        // ============================================
+        // ÁREA ESCRITA EXPLÍCITAMENTE
         //
-        // Aula 8, Aula #8, Bodega, etc.
-        // continúan como ubicaciones históricas.
-        var coincidencia =
+        // Reconoce:
+        //
+        // Área 12
+        // Area 12
+        // AREA 12
+        // Ârea 12
+        // Aréa 12
+        // Área #12
+        // Área No. 12
+        //
+        // No convierte ubicaciones como:
+        //
+        // Área pasillo
+        // Aula 12
+        // Bodega 12
+        // ============================================
+
+        var coincidenciaArea =
             Regex.Match(
-                ubicacion,
-                @"\b(?:area|área|aréa)\s*(?:n[º°o.]*)?\s*#?\s*(\d{1,3})\b",
+                texto,
+                @"\b(?:area|área|ârea|àrea|aréa|áre)\s*(?:n[º°o.]*)?\s*#?\s*(\d{1,3})\b",
                 RegexOptions.IgnoreCase
             );
 
-        if (!coincidencia.Success)
+        if (coincidenciaArea.Success)
         {
-            return null;
+            if (
+                int.TryParse(
+                    coincidenciaArea.Groups[1].Value,
+                    out int numeroArea
+                ) &&
+                numeroArea >= 1 &&
+                numeroArea <= 70
+            )
+            {
+                return numeroArea;
+            }
         }
 
+
+        // ============================================
+        // NÚMERO SEGUIDO DE "AL ÁREA"
+        //
+        // Caso real del inventario:
+        //
+        // "Área 55 a la 56 al Área"
+        //
+        // El destino extraído queda como:
+        // "56 al Área"
+        //
+        // En este caso el número 56 corresponde
+        // al área de destino.
+        // ============================================
+
+        var numeroConAreaSobrante =
+            Regex.Match(
+                texto,
+                @"^\s*#?\s*(\d{1,3})\s+al\s+(?:area|área|ârea|àrea|aréa|áre)\s*$",
+                RegexOptions.IgnoreCase
+            );
+
         if (
+            numeroConAreaSobrante.Success &&
             int.TryParse(
-                coincidencia.Groups[1].Value,
-                out int numero
-            )
+                numeroConAreaSobrante.Groups[1].Value,
+                out int numeroConSobrante
+            ) &&
+            numeroConSobrante >= 1 &&
+            numeroConSobrante <= 71
         )
         {
-            return numero;
+            return numeroConSobrante;
+        }
+
+        // ============================================
+        // UBICACIÓN QUE ES SOLAMENTE UN NÚMERO
+        //
+        // Ejemplo real:
+        //
+        // "fue trasladado del 12 al Área 6"
+        //
+        // El origen extraído es simplemente "12".
+        //
+        // Solo aceptamos números del 1 al 71.
+        //
+        // Esto evita convertir:
+        //
+        // Aula #20
+        // Bodega 12
+        // Pasillo 3
+        // ============================================
+
+        var soloNumero =
+            Regex.Match(
+                texto,
+                @"^\s*#?\s*(\d{1,3})\s*$"
+            );
+
+        if (
+            soloNumero.Success &&
+            int.TryParse(
+                soloNumero.Groups[1].Value,
+                out int numeroSolo
+            ) &&
+            numeroSolo >= 1 &&
+            numeroSolo <= 70
+        )
+        {
+            return numeroSolo;
         }
 
         return null;

@@ -21,6 +21,9 @@ public class ActivoFinalMigracion
 
     public int? AreaActualNumero { get; set; }
 
+    public int? AreaAntesRegularizacionArea71 { get; set; }
+
+    public bool RegularizadoArea71 { get; set; }
     public string? UbicacionHistorica { get; set; }
 
     public string FuenteAreaSeleccionada { get; set; } = string.Empty;

@@ -3,6 +3,7 @@ using ClosedXML.Excel;
 using EscuelaInventario.Migracion.Modelos;
 using EscuelaInventario.Web.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 
 
@@ -9003,12 +9004,11 @@ try
     Console.WriteLine();
 
     bool consolidacionCorrecta =
-        totalActivosFinales == 5355 &&
-        placasUnicasFinales == 5355 &&
-        placasDuplicadasFinalesConsolidadas == 0 &&
-        activosFinalesActivos == 4193 &&
-        activosFinalesBaja == 1162 &&
-        activosSinRegistroInclusion.Count == 5;
+    totalActivosFinales == placasUnicasFinales &&
+    placasDuplicadasFinalesConsolidadas == 0 &&
+    activosFinalesActivos + activosFinalesBaja ==
+        totalActivosFinales &&
+    activosSinRegistroInclusion.Count == 4;
 
     Console.WriteLine(
         "--------------------------------------------"
@@ -9022,6 +9022,9 @@ try
     Console.WriteLine(
         "--------------------------------------------"
     );
+
+
+    
 
 
     Console.WriteLine();
@@ -10045,12 +10048,12 @@ try
 
     Console.WriteLine();
 
-    bool movimientosPreparadosValidos =
-        preparadosTraslado == 3754 &&
-        totalPreparadosBaja == 1229 &&
+        bool movimientosPreparadosValidos =
+        preparadosTraslado == 3819 &&
+        totalPreparadosBaja == 1239 &&
         preparadosCambioEstado == 166 &&
         preparadosModificacion == 71 &&
-        movimientosPreparadosMigracion.Count == 5220 &&
+        movimientosPreparadosMigracion.Count == 5295 &&
         preparadosSinFecha == 24 &&
         placasNoEncontradas == 0;
 
@@ -10063,6 +10066,806 @@ try
         "============================================"
     );
 
+    Console.WriteLine();
+    Console.WriteLine("============================================");
+    Console.WriteLine("   DIAGNÓSTICO DE ÁREAS EN TRASLADOS");
+    Console.WriteLine("============================================");
+    Console.WriteLine();
+
+    var trasladosPreparadosDiagnostico =
+        movimientosPreparadosMigracion
+            .Where(x =>
+                x.TipoMovimientoCodigo == "TRASLADO")
+            .ToList();
+
+    int trasladosSinAreaAnterior =
+        trasladosPreparadosDiagnostico.Count(
+            x => !x.AreaAnteriorNumero.HasValue
+        );
+
+    int trasladosConAreaAnterior =
+        trasladosPreparadosDiagnostico.Count(
+            x => x.AreaAnteriorNumero.HasValue
+        );
+
+    int trasladosSinAreaNueva =
+        trasladosPreparadosDiagnostico.Count(
+            x => !x.AreaNuevaNumero.HasValue
+        );
+
+    int trasladosConAreaNueva =
+        trasladosPreparadosDiagnostico.Count(
+            x => x.AreaNuevaNumero.HasValue
+        );
+
+    Console.WriteLine(
+        $"Total traslados: {trasladosPreparadosDiagnostico.Count}"
+    );
+
+    Console.WriteLine(
+        $"Sin área anterior: {trasladosSinAreaAnterior}"
+    );
+
+    Console.WriteLine(
+        $"Con área anterior: {trasladosConAreaAnterior}"
+    );
+
+    Console.WriteLine(
+        $"Sin área nueva: {trasladosSinAreaNueva}"
+    );
+
+    Console.WriteLine(
+        $"Con área nueva: {trasladosConAreaNueva}"
+    );
+
+    Console.WriteLine("============================================");
+    Console.WriteLine();
+
+    Console.WriteLine();
+    Console.WriteLine("============================================");
+    Console.WriteLine("   EJEMPLOS DE TRASLADOS SIN ÁREA NUMÉRICA");
+    Console.WriteLine("============================================");
+    Console.WriteLine();
+
+    Console.WriteLine("PRIMEROS 30 SIN ÁREA ANTERIOR:");
+    Console.WriteLine();
+
+    foreach (
+        var traslado
+        in trasladosHistoricos
+            .Where(x => !x.AreaAnteriorNumero.HasValue)
+            .Take(30)
+    )
+    {
+        Console.WriteLine(
+            $"Origen: '{traslado.UbicacionAnteriorOriginal}'"
+        );
+
+        Console.WriteLine(
+            $"Destino: '{traslado.UbicacionNuevaOriginal}'"
+        );
+
+        Console.WriteLine(
+            $"Área nueva numérica: " +
+            $"{(traslado.AreaNuevaNumero.HasValue ? traslado.AreaNuevaNumero.Value.ToString() : "NULL")}"
+        );
+
+        Console.WriteLine("--------------------------------------------");
+    }
+
+    Console.WriteLine();
+    Console.WriteLine("PRIMEROS 30 SIN ÁREA NUEVA:");
+    Console.WriteLine();
+
+    foreach (
+        var traslado
+        in trasladosHistoricos
+            .Where(x => !x.AreaNuevaNumero.HasValue)
+            .Take(30)
+    )
+    {
+        Console.WriteLine(
+            $"Origen: '{traslado.UbicacionAnteriorOriginal}'"
+        );
+
+        Console.WriteLine(
+            $"Área anterior numérica: " +
+            $"{(traslado.AreaAnteriorNumero.HasValue ? traslado.AreaAnteriorNumero.Value.ToString() : "NULL")}"
+        );
+
+        Console.WriteLine(
+            $"Destino: '{traslado.UbicacionNuevaOriginal}'"
+        );
+
+        Console.WriteLine("--------------------------------------------");
+    }
+
+    Console.WriteLine("============================================");
+
+
+    Console.WriteLine();
+    Console.WriteLine("============================================");
+    Console.WriteLine("   UBICACIONES DISTINTAS SIN ÁREA NUMÉRICA");
+    Console.WriteLine("============================================");
+    Console.WriteLine();
+
+    Console.WriteLine("ORÍGENES SIN ÁREA NUMÉRICA:");
+    Console.WriteLine();
+
+    var origenesSinNumero =
+        trasladosHistoricos
+            .Where(x => !x.AreaAnteriorNumero.HasValue)
+            .GroupBy(
+                x => x.UbicacionAnteriorOriginal ?? "[VACÍO]",
+                StringComparer.OrdinalIgnoreCase
+            )
+            .OrderByDescending(x => x.Count())
+            .ThenBy(x => x.Key)
+            .ToList();
+
+    foreach (var grupo in origenesSinNumero)
+    {
+        Console.WriteLine(
+            $"{grupo.Count(),4} | {grupo.Key}"
+        );
+    }
+
+    Console.WriteLine();
+    Console.WriteLine("DESTINOS SIN ÁREA NUMÉRICA:");
+    Console.WriteLine();
+
+    var destinosSinNumero =
+        trasladosHistoricos
+            .Where(x => !x.AreaNuevaNumero.HasValue)
+            .GroupBy(
+                x => x.UbicacionNuevaOriginal ?? "[VACÍO]",
+                StringComparer.OrdinalIgnoreCase
+            )
+            .OrderByDescending(x => x.Count())
+            .ThenBy(x => x.Key)
+            .ToList();
+
+    foreach (var grupo in destinosSinNumero)
+    {
+        Console.WriteLine(
+            $"{grupo.Count(),4} | {grupo.Key}"
+        );
+    }
+
+    Console.WriteLine("============================================");
+
+
+    Console.WriteLine();
+    Console.WriteLine("============================================");
+    Console.WriteLine("   CASOS CON DESTINO '56 al Área'");
+    Console.WriteLine("============================================");
+    Console.WriteLine();
+
+    foreach (
+        var traslado
+        in trasladosHistoricos
+            .Where(x =>
+                x.UbicacionNuevaOriginal != null &&
+                x.UbicacionNuevaOriginal.Contains(
+                    "56 al Área",
+                    StringComparison.OrdinalIgnoreCase
+                )
+            )
+    )
+    {
+        Console.WriteLine(
+            $"Placas: {string.Join(", ", traslado.Placas)}"
+        );
+
+        Console.WriteLine(
+            $"Origen extraído: '{traslado.UbicacionAnteriorOriginal}'"
+        );
+
+        Console.WriteLine(
+            $"Destino extraído: '{traslado.UbicacionNuevaOriginal}'"
+        );
+
+        Console.WriteLine(
+            $"Texto completo: {traslado.TextoOriginal}"
+        );
+
+        Console.WriteLine("--------------------------------------------");
+    }
+
+    Console.WriteLine("============================================");
+
+
+    Console.WriteLine();
+    Console.WriteLine("============================================");
+    Console.WriteLine("   DESTINOS RECONOCIDOS POR FORMATO 'N AL ÁREA'");
+    Console.WriteLine("============================================");
+    Console.WriteLine();
+
+    var destinosConAreaSobrante =
+        trasladosHistoricos
+            .Where(x =>
+                !string.IsNullOrWhiteSpace(x.UbicacionNuevaOriginal) &&
+                Regex.IsMatch(
+                    x.UbicacionNuevaOriginal,
+                    @"^\s*#?\s*(\d{1,3})\s+al\s+(?:area|área|ârea|àrea|aréa|áre)\s*$",
+                    RegexOptions.IgnoreCase
+                )
+            )
+            .ToList();
+
+    Console.WriteLine(
+        $"Total encontrados: {destinosConAreaSobrante.Count}"
+    );
+
+    Console.WriteLine();
+
+    foreach (var traslado in destinosConAreaSobrante)
+    {
+        Console.WriteLine(
+            $"Placas: {string.Join(", ", traslado.Placas)}"
+        );
+
+        Console.WriteLine(
+            $"Origen: '{traslado.UbicacionAnteriorOriginal}'"
+        );
+
+        Console.WriteLine(
+            $"Destino: '{traslado.UbicacionNuevaOriginal}'"
+        );
+
+        Console.WriteLine(
+            $"Área nueva detectada: {traslado.AreaNuevaNumero}"
+        );
+
+        Console.WriteLine(
+            $"Texto: {traslado.TextoOriginal}"
+        );
+
+        Console.WriteLine("--------------------------------------------");
+    }
+
+    Console.WriteLine("============================================");
+
+
+    Console.WriteLine();
+    Console.WriteLine(
+        "============================================"
+    );
+    Console.WriteLine(
+        "   ANÁLISIS DE ANOMALÍAS PARA ÁREA 71"
+    );
+    Console.WriteLine(
+        "============================================"
+    );
+    Console.WriteLine();
+
+    // ============================================================
+    // RUTA DEL ARCHIVO AUXILIAR DE ANOMALÍAS
+    // ============================================================
+
+    string rutaArchivoAnomalias =
+        Path.Combine(
+            AppContext.BaseDirectory,
+            "..",
+            "..",
+            "..",
+            "DatosAuxiliares",
+            "Anomalias y Baja.xlsx"
+        );
+
+    rutaArchivoAnomalias =
+        Path.GetFullPath(
+            rutaArchivoAnomalias
+        );
+
+    Console.WriteLine(
+        $"Archivo de anomalías: {rutaArchivoAnomalias}"
+    );
+
+    Console.WriteLine();
+
+    // ============================================================
+    // ANALIZAR ANOMALÍAS
+    // ============================================================
+
+    var analizadorAnomaliasArea71 =
+        new AnalizadorAnomaliasArea71Service();
+
+    var resultadosAnomaliasArea71 =
+    analizadorAnomaliasArea71.Analizar(
+        rutaArchivoAnomalias,
+        activosFinalesMigracion,
+        movimientosPreparadosMigracion
+    );
+
+    // ============================================================
+    // RESUMEN
+    // ============================================================
+
+    Console.WriteLine(
+        $"Placas únicas analizadas: " +
+        $"{resultadosAnomaliasArea71.Count}"
+    );
+
+    Console.WriteLine();
+
+    var gruposAnomalias =
+        resultadosAnomaliasArea71
+            .GroupBy(
+                x => x.Clasificacion
+            )
+            .OrderByDescending(
+                x => x.Count()
+            )
+            .ToList();
+
+    Console.WriteLine(
+        "Distribución por clasificación:"
+    );
+
+    Console.WriteLine();
+
+    foreach (
+        var grupo
+        in gruposAnomalias
+    )
+    {
+        Console.WriteLine(
+            $"{grupo.Key}: {grupo.Count()}"
+        );
+    }
+
+    Console.WriteLine();
+
+    // ============================================================
+    // DUPLICADOS DENTRO DEL EXCEL
+    // ============================================================
+
+    var anomaliasDuplicadasExcel =
+        resultadosAnomaliasArea71
+            .Where(
+                x => x.CantidadAparicionesExcel > 1
+            )
+            .OrderByDescending(
+                x => x.CantidadAparicionesExcel
+            )
+            .ThenBy(
+                x => x.Placa
+            )
+            .ToList();
+
+    Console.WriteLine(
+        $"Placas repetidas dentro del Excel: " +
+        $"{anomaliasDuplicadasExcel.Count}"
+    );
+
+    Console.WriteLine();
+
+    // ============================================================
+    // CANDIDATAS A ÁREA 71
+    // ============================================================
+
+    var candidatasArea71 =
+    resultadosAnomaliasArea71
+        .Where(
+            x =>
+            x.Clasificacion ==
+                "CANDIDATA_AREA_71_ACTIVA" ||
+            x.Clasificacion ==
+                "CANDIDATA_AREA_71_BAJA"
+        )
+        .OrderBy(
+            x => x.Placa
+        )
+        .ToList();
+
+    var candidatasActivasArea71 =
+    candidatasArea71
+        .Count(
+            x =>
+            x.Clasificacion ==
+            "CANDIDATA_AREA_71_ACTIVA"
+        );
+
+    var candidatasBajaArea71 =
+        candidatasArea71
+            .Count(
+                x =>
+                x.Clasificacion ==
+                "CANDIDATA_AREA_71_BAJA"
+            );
+
+    Console.WriteLine(
+        $"Candidatas totales a Área 71: " +
+        $"{candidatasArea71.Count}"
+    );
+
+    Console.WriteLine(
+        $"  Activas: " +
+        $"{candidatasActivasArea71}"
+    );
+
+    Console.WriteLine(
+        $"  Dadas de baja: " +
+        $"{candidatasBajaArea71}"
+    );
+
+    Console.WriteLine();
+
+    Console.WriteLine(
+        $"Candidatas a Área 71: " +
+        $"{candidatasArea71.Count}"
+    );
+
+    Console.WriteLine();
+
+    var candidatasConAreaActual =
+    candidatasArea71
+        .Count(
+            x => x.AreaActualNumero.HasValue
+        );
+
+    var candidatasSinAreaActual =
+        candidatasArea71
+            .Count(
+                x => !x.AreaActualNumero.HasValue
+            );
+
+    var candidatasDuplicadasEnExcel =
+        candidatasArea71
+            .Count(
+                x => x.CantidadAparicionesExcel > 1
+            );
+
+    Console.WriteLine(
+        "Validación de área de origen:"
+    );
+
+    Console.WriteLine();
+
+    Console.WriteLine(
+        $"  Con área actual numérica: " +
+        $"{candidatasConAreaActual}"
+    );
+
+    Console.WriteLine(
+        $"  Sin área actual numérica: " +
+        $"{candidatasSinAreaActual}"
+    );
+
+    Console.WriteLine(
+        $"  Repetidas en el Excel de anomalías: " +
+        $"{candidatasDuplicadasEnExcel}"
+    );
+
+    Console.WriteLine();
+
+    Console.WriteLine(
+        $"  Total verificado: " +
+        $"{candidatasConAreaActual +
+           candidatasSinAreaActual}"
+    );
+
+    Console.WriteLine();
+
+    var candidatasConUltimoMovimiento =
+    candidatasArea71
+        .Count(
+            x =>
+            x.OrigenFechaUltimoRegistro ==
+            "ULTIMO_MOVIMIENTO"
+        );
+
+    var candidatasConFechaAdquisicion =
+        candidatasArea71
+            .Count(
+                x =>
+                x.OrigenFechaUltimoRegistro ==
+                "FECHA_ADQUISICION"
+            );
+
+    var candidatasSinFecha =
+        candidatasArea71
+            .Count(
+                x =>
+                x.OrigenFechaUltimoRegistro ==
+                "SIN_FECHA"
+            );
+
+    Console.WriteLine(
+        "Fechas propuestas para traslado a Área 71:"
+    );
+
+    Console.WriteLine();
+
+    Console.WriteLine(
+        $"  Con última fecha de movimiento: " +
+        $"{candidatasConUltimoMovimiento}"
+    );
+
+    Console.WriteLine(
+        $"  Solo con fecha de adquisición: " +
+        $"{candidatasConFechaAdquisicion}"
+    );
+
+    Console.WriteLine(
+        $"  Sin fecha utilizable: " +
+        $"{candidatasSinFecha}"
+    );
+
+    Console.WriteLine();
+
+    Console.WriteLine(
+        $"  Total verificado: " +
+        $"{candidatasConUltimoMovimiento +
+           candidatasConFechaAdquisicion +
+           candidatasSinFecha}"
+    );
+
+    Console.WriteLine();
+
+    Console.WriteLine();
+
+    // ============================================================
+    // NO ENCONTRADAS
+    // ============================================================
+
+    var noEncontradasArea71 =
+        resultadosAnomaliasArea71
+            .Where(
+                x =>
+                x.Clasificacion ==
+                "NO_ENCONTRADA"
+            )
+            .OrderBy(
+                x => x.Placa
+            )
+            .ToList();
+
+    Console.WriteLine(
+        $"Placas no encontradas en el corte oficial: " +
+        $"{noEncontradasArea71.Count}"
+    );
+
+    Console.WriteLine();
+
+    // ============================================================
+    // YA EN ÁREA 71
+    // ============================================================
+
+    var yaArea71 =
+        resultadosAnomaliasArea71
+            .Where(
+                x =>
+                x.Clasificacion ==
+                "YA_AREA_71"
+            )
+            .OrderBy(
+                x => x.Placa
+            )
+            .ToList();
+
+    Console.WriteLine(
+        $"Ya ubicadas en Área 71: " +
+        $"{yaArea71.Count}"
+    );
+
+    Console.WriteLine();
+
+    // ============================================================
+    // PRIMERAS CANDIDATAS
+    // ============================================================
+
+    Console.WriteLine(
+        "Primeras 30 candidatas:"
+    );
+
+    Console.WriteLine();
+
+    foreach (
+        var item
+        in candidatasArea71.Take(30)
+    )
+    {
+        Console.WriteLine(
+            $"Placa: {item.Placa}"
+        );
+
+        Console.WriteLine(
+            $"Área actual: " +
+            $"{(
+                item.AreaActualNumero.HasValue
+                    ? item.AreaActualNumero.Value.ToString()
+                    : "[SIN ÁREA]"
+            )}"
+        );
+
+        Console.WriteLine(
+    $"Fecha propuesta: " +
+    $"{(
+        item.FechaUltimoRegistro.HasValue
+            ? item.FechaUltimoRegistro.Value
+                .ToString("dd/MM/yyyy")
+            : "[SIN FECHA]"
+    )}"
+);
+
+        Console.WriteLine(
+            $"Origen de fecha: " +
+            $"{item.OrigenFechaUltimoRegistro}"
+        );
+
+        Console.WriteLine(
+            $"Apariciones en Excel: " +
+            $"{item.CantidadAparicionesExcel}"
+        );
+
+        Console.WriteLine(
+            $"Hoja(s): " +
+            $"{string.Join(", ", item.HojasOrigen)}"
+        );
+
+        Console.WriteLine(
+            $"Observación: {item.Observacion}"
+        );
+
+        Console.WriteLine(
+            "--------------------------------------------"
+        );
+    }
+
+    var candidatasSinArea =
+    candidatasArea71
+        .Where(
+            x => !x.AreaActualNumero.HasValue
+        )
+        .OrderBy(
+            x => x.Placa
+        )
+        .ToList();
+
+    if (candidatasSinArea.Count > 0)
+    {
+        Console.WriteLine(
+            "============================================"
+        );
+
+        Console.WriteLine(
+            "   CANDIDATAS A ÁREA 71 SIN ÁREA DE ORIGEN"
+        );
+
+        Console.WriteLine(
+            "============================================"
+        );
+
+        Console.WriteLine();
+
+        foreach (
+            var item
+            in candidatasSinArea
+        )
+        {
+            Console.WriteLine(
+                $"Placa: {item.Placa}"
+            );
+
+            Console.WriteLine(
+                $"Situación: {item.SituacionActual}"
+            );
+
+            Console.WriteLine(
+                $"Fecha propuesta: " +
+                $"{(
+                    item.FechaUltimoRegistro.HasValue
+                        ? item.FechaUltimoRegistro.Value
+                            .ToString("dd/MM/yyyy")
+                        : "[SIN FECHA]"
+                )}"
+            );
+
+            Console.WriteLine(
+                $"Hoja(s): " +
+                $"{string.Join(", ", item.HojasOrigen)}"
+            );
+
+            Console.WriteLine(
+                $"Observación: {item.Observacion}"
+            );
+
+            Console.WriteLine(
+                "--------------------------------------------"
+            );
+        }
+
+        Console.WriteLine();
+    }
+
+
+    // ============================================================
+    // NO ENCONTRADAS
+    // ============================================================
+
+    if (noEncontradasArea71.Count > 0)
+    {
+        Console.WriteLine();
+        Console.WriteLine(
+            "============================================"
+        );
+        Console.WriteLine(
+            "   ANOMALÍAS NO ENCONTRADAS"
+        );
+        Console.WriteLine(
+            "============================================"
+        );
+        Console.WriteLine();
+
+        foreach (
+            var item
+            in noEncontradasArea71
+        )
+        {
+            Console.WriteLine(
+                $"Placa: {item.Placa}"
+            );
+
+            Console.WriteLine(
+                $"Apariciones: " +
+                $"{item.CantidadAparicionesExcel}"
+            );
+
+            Console.WriteLine(
+                $"Hoja(s): " +
+                $"{string.Join(", ", item.HojasOrigen)}"
+            );
+
+            Console.WriteLine(
+                "--------------------------------------------"
+            );
+        }
+    }
+
+
+    // ============================================================
+    // APLICAR ÁREA 71 A LOS ACTIVOS DEL CORTE FINAL
+    // ============================================================
+
+    int activosActualizadosArea71 = 0;
+
+    foreach (var candidata in candidatasArea71)
+    {
+        var activoFinal =
+            activosFinalesMigracion
+                .FirstOrDefault(
+                    x =>
+                    x.Placa.Equals(
+                        candidata.Placa,
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                );
+
+        if (activoFinal == null)
+        {
+            continue;
+        }
+
+        activoFinal.AreaAntesRegularizacionArea71 =
+        activoFinal.AreaActualNumero;
+
+        activoFinal.RegularizadoArea71 = true;
+
+        activoFinal.AreaActualNumero = 71;
+
+        activosActualizadosArea71++;
+    }
+
+    Console.WriteLine();
+
+    Console.WriteLine(
+        $"Activos actualizados a Área 71: " +
+        $"{activosActualizadosArea71}"
+    );
+
+    Console.WriteLine();
 
 
     Console.WriteLine();
@@ -10099,6 +10902,22 @@ try
 
     await verificadorBaseDatos.VerificarAsync();
 
+
+
+    Console.WriteLine();
+    Console.WriteLine(
+        "--------------------------------------------"
+    );
+
+    Console.WriteLine(
+        "ANÁLISIS DE ÁREA 71 FINALIZADO"
+    );
+
+    Console.WriteLine(
+        "--------------------------------------------"
+    );
+
+    Console.WriteLine();
 
     // ============================================
     // 12. INCIDENCIAS

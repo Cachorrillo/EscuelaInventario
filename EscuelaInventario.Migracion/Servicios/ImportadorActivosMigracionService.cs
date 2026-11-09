@@ -161,7 +161,7 @@ public class ImportadorActivosMigracionService
 
             var areas =
                 Enumerable
-                    .Range(1, 70)
+                    .Range(1, 71)
                     .Select(
                         numero =>
                             new Area
@@ -406,13 +406,13 @@ public class ImportadorActivosMigracionService
                     .Count();
 
             if (
-                activosSql.Count != 5355 ||
-                placasUnicas != 5355
+                activosSql.Count != 5356 ||
+                placasUnicas != 5356
             )
             {
                 throw new InvalidOperationException(
                     $"La colección SQL no contiene exactamente " +
-                    $"5355 activos únicos. " +
+                    $"5356 activos únicos. " +
                     $"Total: {activosSql.Count}. " +
                     $"Únicos: {placasUnicas}."
                 );
@@ -469,10 +469,10 @@ public class ImportadorActivosMigracionService
                     );
 
                 bool resultadoValido =
-                    activosInsertados == 5355 &&
-                    areasInsertadas == 70 &&
-                    activosSituacionActivo == 4193 &&
-                    activosSituacionBaja == 1162 &&
+                    activosInsertados == 5356 &&
+                    areasInsertadas == 71 &&
+                    activosSituacionActivo == 4184 &&
+                    activosSituacionBaja == 1172 &&
                     activosSinEstado == sinEstado &&
                     activosSinArea == sinArea &&
                     activosSinModo == sinModo;
@@ -534,10 +534,10 @@ public class ImportadorActivosMigracionService
                 return;
             }
 
-            if (movimientosHistoricos.Count != 5220)
+            if (movimientosHistoricos.Count != 5295)
             {
                 throw new InvalidOperationException(
-                    $"Se esperaban 5220 movimientos históricos " +
+                    $"Se esperaban 5295 movimientos históricos " +
                     $"preparados y se recibieron " +
                     $"{movimientosHistoricos.Count}."
                 );
@@ -630,7 +630,9 @@ public class ImportadorActivosMigracionService
                 else
                 {
                     areaInclusionNumero =
-                        fuente.AreaActualNumero;
+                        fuente.RegularizadoArea71
+                            ? fuente.AreaAntesRegularizacionArea71
+                            : fuente.AreaActualNumero;
 
                     if (areaInclusionNumero.HasValue)
                     {
@@ -652,7 +654,7 @@ public class ImportadorActivosMigracionService
                     throw new InvalidOperationException(
                         $"El área original reconstruida " +
                         $"{areaInclusionNumero.Value} para la placa " +
-                        $"{fuente.Placa} no existe entre las áreas 1-70."
+                        $"{fuente.Placa} no existe entre las áreas 1-71."
                     );
                 }
 
@@ -660,11 +662,11 @@ public class ImportadorActivosMigracionService
                     areaInclusionNumero;
             }
 
-            if (areaInclusionPorPlaca.Count != 5355)
+            if (areaInclusionPorPlaca.Count != 5356)
             {
                 throw new InvalidOperationException(
                     $"Se esperaban áreas de inclusión evaluadas para " +
-                    $"5355 activos y se obtuvieron " +
+                    $"5356 activos y se obtuvieron " +
                     $"{areaInclusionPorPlaca.Count}."
                 );
             }
@@ -779,10 +781,10 @@ public class ImportadorActivosMigracionService
                 );
             }
 
-            if (registrosInclusion.Count != 5350)
+            if (registrosInclusion.Count != 5352)
             {
                 throw new InvalidOperationException(
-                    $"Se esperaban 5350 registros de libro " +
+                    $"Se esperaban 5352 registros de libro " +
                     $"de inclusión y se prepararon " +
                     $"{registrosInclusion.Count}."
                 );
@@ -946,10 +948,10 @@ public class ImportadorActivosMigracionService
                 }
             }
 
-            if (registrosHistoricosSql.Count != 11092)
+            if (registrosHistoricosSql.Count != 11244)
             {
                 throw new InvalidOperationException(
-                    $"Se esperaban 11092 posiciones históricas " +
+                    $"Se esperaban 11244 posiciones históricas " +
                     $"y se prepararon " +
                     $"{registrosHistoricosSql.Count}."
                 );
@@ -1004,10 +1006,10 @@ public class ImportadorActivosMigracionService
                 );
 
             configuracion.PrefijoPlaca = "4615";
-            configuracion.UltimoConsecutivoPlaca = 5375;
+            configuracion.UltimoConsecutivoPlaca = 5376;
             configuracion.TomoActual = 5;
-            configuracion.FolioActual = 805;
-            configuracion.AsientoActual = 20;
+            configuracion.FolioActual = 810;
+            configuracion.AsientoActual = 13;
             configuracion.AsientosPorFolio = 32;
             configuracion.FechaModificacion = ahora;
 
@@ -1096,7 +1098,7 @@ public class ImportadorActivosMigracionService
             bool reconstruccionAreaOriginalCorrecta =
                 areaInclusionDesdePrimerTraslado +
                 areaInclusionDesdeAreaActual +
-                areaInclusionSinEvidencia == 5355 &&
+                areaInclusionSinEvidencia == 5356 &&
                 inclusionesConAreaOriginal ==
                     areaInclusionDesdePrimerTraslado +
                     areaInclusionDesdeAreaActual &&
@@ -1104,26 +1106,26 @@ public class ImportadorActivosMigracionService
                     areaInclusionSinEvidencia;
 
             bool configuracionCorrecta =
-                configuracion.PrefijoPlaca == "4615" &&
-                configuracion.UltimoConsecutivoPlaca == 5375 &&
-                configuracion.TomoActual == 5 &&
-                configuracion.FolioActual == 805 &&
-                configuracion.AsientoActual == 20 &&
-                configuracion.AsientosPorFolio == 32;
+                    configuracion.PrefijoPlaca == "4615" &&
+                    configuracion.UltimoConsecutivoPlaca == 5376 &&
+                    configuracion.TomoActual == 5 &&
+                    configuracion.FolioActual == 810 &&
+                    configuracion.AsientoActual == 13 &&
+                    configuracion.AsientosPorFolio == 32;
 
             bool resultadoCompletoValido =
-                totalAreas == 70 &&
-                totalActivos == 5355 &&
-                totalMovimientos == 10575 &&
-                totalRegistrosLibro == 16442 &&
-                totalInclusion == 5355 &&
-                totalTraslado == 3754 &&
-                totalBaja == 1229 &&
+                totalAreas == 71 &&
+                totalActivos == 5356 &&
+                 totalMovimientos == 10651 &&
+                totalRegistrosLibro == 16596 &&
+                 totalInclusion == 5356 &&
+                 totalTraslado == 3819 &&
+                 totalBaja == 1239 &&
                 totalCambioEstado == 166 &&
                 totalModificacion == 71 &&
                 totalSinFechaHistorica == 24 &&
                 reconstruccionAreaOriginalCorrecta &&
-                configuracionCorrecta;
+                 configuracionCorrecta;
 
             Console.WriteLine(
                 $"Áreas: {totalAreas}"
@@ -1275,10 +1277,10 @@ public class ImportadorActivosMigracionService
                     await _context.Areas.CountAsync();
 
                 bool commitConfirmado =
-                    activosConfirmados == 5355 &&
-                    movimientosConfirmados == 10575 &&
-                    registrosConfirmados == 16442 &&
-                    areasConfirmadas == 70;
+                    activosConfirmados == 5356 &&
+                    movimientosConfirmados == 10651 &&
+                    registrosConfirmados == 16596 &&
+                    areasConfirmadas == 71;
 
                 Console.WriteLine();
                 Console.WriteLine(
